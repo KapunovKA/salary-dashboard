@@ -1739,7 +1739,6 @@
                     if (!data.salary || typeof data.salary !== 'object') {
                         throw new Error('Неверный формат файла');
                     }
-                    // Применяем импортированные данные
                     applyImportedData(data);
                 } catch(err) {
                     showToast('❌ Ошибка импорта: ' + err.message, 'error');
@@ -1898,7 +1897,7 @@
         setInterval(createBackup, 60000);
 
         // ==========================================
-        // 16. ИНТЕГРАЦИЯ С ЯНДЕКС ДИСК (ИСПРАВЛЕННАЯ)
+        // 16. ИНТЕГРАЦИЯ С ЯНДЕКС ДИСК (ИСПРАВЛЕННАЯ загрузка через XMLHttpRequest)
         // ==========================================
         function getYandexToken() {
             return localStorage.getItem('yandexToken') || null;
@@ -1982,7 +1981,7 @@
             }
         });
 
-        // ИСПРАВЛЕННЫЕ ФУНКЦИИ СОХРАНЕНИЯ/ЗАГРУЗКИ
+        // Сохранение – без изменений (работает)
         async function saveToYandexDisk(data) {
             const token = getYandexToken();
             if (!token) {
@@ -2029,6 +2028,7 @@
             }
         }
 
+        // ЗАГРУЗКА – используем XMLHttpRequest для обхода CORS в Safari
         async function loadFromYandexDisk() {
             const token = getYandexToken();
             if (!token) {
@@ -2037,6 +2037,7 @@
                 return null;
             }
             try {
+                // Получаем ссылку на скачивание
                 const downloadUrlResponse = await fetch(
                     `https://cloud-api.yandex.net/v1/disk/resources/download?path=app:/salary_data.json`,
                     {
@@ -2060,25 +2061,47 @@
                 }
                 const downloadUrlData = await downloadUrlResponse.json();
                 let downloadUrl = downloadUrlData.href;
-                // Добавляем access_token в URL (без заголовка Authorization, чтобы не было CORS конфликта)
+                // Добавляем access_token в URL (без заголовка Authorization)
                 if (!downloadUrl.includes('access_token')) {
                     const separator = downloadUrl.includes('?') ? '&' : '?';
                     downloadUrl += separator + 'access_token=' + token;
                 }
                 downloadUrl += '&_t=' + Date.now();
-                const downloadResponse = await fetch(downloadUrl);
-                if (!downloadResponse.ok) {
-                    if (downloadResponse.status === 401 || downloadResponse.status === 403) {
-                        showToast('❌ Токен недействителен или истёк. Введите новый.', 'error');
-                        setYandexToken(null);
-                        showTokenModal();
-                        return null;
-                    }
-                    throw new Error(`Ошибка скачивания: ${downloadResponse.statusText}`);
-                }
-                const data = await downloadResponse.json();
-                showToast('✅ Данные загружены из Яндекс Диска!', 'success');
-                return data;
+
+                // Используем XMLHttpRequest вместо fetch
+                return new Promise((resolve, reject) => {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', downloadUrl, true);
+                    xhr.responseType = 'json';
+                    xhr.timeout = 30000; // 30 секунд
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            try {
+                                const data = xhr.response;
+                                showToast('✅ Данные загружены из Яндекс Диска!', 'success');
+                                resolve(data);
+                            } catch (e) {
+                                reject(new Error('Ошибка парсинга JSON: ' + e.message));
+                            }
+                        } else {
+                            if (xhr.status === 401 || xhr.status === 403) {
+                                showToast('❌ Токен недействителен или истёк. Введите новый.', 'error');
+                                setYandexToken(null);
+                                showTokenModal();
+                                reject(new Error('Токен недействителен'));
+                            } else {
+                                reject(new Error('Ошибка загрузки: ' + xhr.status + ' ' + xhr.statusText));
+                            }
+                        }
+                    };
+                    xhr.onerror = function() {
+                        reject(new Error('Ошибка сети при загрузке файла'));
+                    };
+                    xhr.ontimeout = function() {
+                        reject(new Error('Таймаут загрузки файла'));
+                    };
+                    xhr.send();
+                });
             } catch (error) {
                 console.error('Ошибка загрузки:', error);
                 if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
