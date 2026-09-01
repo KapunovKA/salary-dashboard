@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>чччччччччччч</title>
+    <title>Дашборд зарплаты</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%234a7bc4' stroke-width='1.5' d='M2 12 L5 8 L8 10 L11 5 L14 7'/%3E%3Crect x='1' y='13' width='14' height='1.5' fill='%234a7bc4'/%3E%3C/svg%3E">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -613,6 +613,9 @@
             <button class="action-btn" id="exportBtn">📥 Экспорт JSON</button>
             <button class="action-btn" id="importBtn">📤 Импорт JSON</button>
             <button class="action-btn" id="pdfBtn">📄 PDF</button>
+            <!-- Новые кнопки для Яндекс Диска -->
+            <button class="action-btn" id="saveCloudBtn">☁️ Сохранить в Яндекс</button>
+            <button class="action-btn" id="loadCloudBtn">☁️ Загрузить из Яндекса</button>
             <button class="settings-btn" id="settingsBtn">⚙️ Настройки</button>
             <input type="file" id="fileInput" class="file-input-hidden" accept=".json">
         </div>
@@ -929,7 +932,7 @@
             compareYears: [],
             authenticated: false,
             inactivityTimeout: null,
-            inactivityDelay: 300000, // авто выход из системы в мс (установлено на 5 минут)
+            inactivityDelay: 300000,
             dashTooltipData: null
         };
 
@@ -954,7 +957,6 @@
                     if (parsed.authenticated) state.authenticated = parsed.authenticated;
                 }
             } catch(e) {}
-            // Фиксируем порядок только для трёх валют
             state.widgetOrder = ['usd', 'eur', 'cny'];
         }
         function saveSettings() {
@@ -1843,10 +1845,7 @@
             }
             try {
                 localStorage.setItem('salaryBackup', JSON.stringify(backup));
-                // toast убран
-            } catch(e) {
-                // ошибка тоже без уведомления
-            }
+            } catch(e) {}
         }
 
         function restoreBackup() {
@@ -1885,14 +1884,162 @@
 
         document.getElementById('backupNowBtn').addEventListener('click', function() {
             createBackup();
-            // показываем сообщение только при ручном нажатии (без toast)
             showToast('💾 Бэкап создан', 'success');
         });
         document.getElementById('restoreBackupBtn').addEventListener('click', restoreBackup);
-        setInterval(createBackup, 60000); // авто-бэкап без уведомлений
+        setInterval(createBackup, 60000);
 
         // ==========================================
-        // 16. СТАТИСТИКА ЗАРПЛАТЫ (с разбивкой на кварталы)
+        // 16. ИНТЕГРАЦИЯ С ЯНДЕКС ДИСК
+        // ==========================================
+        // !! ВСТАВЬТЕ СВОЙ ТОКЕН ЗДЕСЬ !!
+        const YANDEX_DISK_TOKEN = y0__wgBENC67_ECGNuWAyCq8ITwGDDF9MLdB3iC6oauHQo6MkWyUpMFxNj_CehO; 
+
+        async function saveToYandexDisk(data) {
+            if (!YANDEX_DISK_TOKEN || YANDEX_DISK_TOKEN === 'ваш_токен_здесь') {
+                showToast('⚠️ Сначала укажите токен Яндекс Диска в коде', 'warning');
+                return;
+            }
+            try {
+                const uploadUrlResponse = await fetch(
+                    `https://cloud-api.yandex.net/v1/disk/resources/upload?path=app:/salary_data.json&overwrite=true`,
+                    {
+                        method: 'GET',
+                        headers: { 'Authorization': `OAuth ${YANDEX_DISK_TOKEN}` }
+                    }
+                );
+                if (!uploadUrlResponse.ok) {
+                    const errorText = await uploadUrlResponse.text();
+                    throw new Error(`Ошибка получения URL: ${errorText}`);
+                }
+                const uploadUrlData = await uploadUrlResponse.json();
+                const jsonString = JSON.stringify(data);
+                const uploadResponse = await fetch(uploadUrlData.href, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: jsonString
+                });
+                if (!uploadResponse.ok) {
+                    throw new Error(`Ошибка загрузки: ${uploadResponse.statusText}`);
+                }
+                showToast('✅ Данные сохранены в Яндекс Диск!', 'success');
+            } catch (error) {
+                console.error('Ошибка сохранения:', error);
+                showToast('❌ Ошибка сохранения: ' + error.message, 'error');
+            }
+        }
+
+        async function loadFromYandexDisk() {
+            if (!YANDEX_DISK_TOKEN || YANDEX_DISK_TOKEN === 'ваш_токен_здесь') {
+                showToast('⚠️ Сначала укажите токен Яндекс Диска в коде', 'warning');
+                return null;
+            }
+            try {
+                const downloadUrlResponse = await fetch(
+                    `https://cloud-api.yandex.net/v1/disk/resources/download?path=app:/salary_data.json`,
+                    {
+                        method: 'GET',
+                        headers: { 'Authorization': `OAuth ${YANDEX_DISK_TOKEN}` }
+                    }
+                );
+                if (!downloadUrlResponse.ok) {
+                    if (downloadUrlResponse.status === 404) {
+                        showToast('ℹ️ Файл на Диске не найден. Сначала сохраните данные.', 'warning');
+                        return null;
+                    }
+                    const errorText = await downloadUrlResponse.text();
+                    throw new Error(`Ошибка получения URL: ${errorText}`);
+                }
+                const downloadUrlData = await downloadUrlResponse.json();
+                const downloadResponse = await fetch(downloadUrlData.href);
+                if (!downloadResponse.ok) {
+                    throw new Error(`Ошибка скачивания: ${downloadResponse.statusText}`);
+                }
+                const data = await downloadResponse.json();
+                showToast('✅ Данные загружены из Яндекс Диска!', 'success');
+                return data;
+            } catch (error) {
+                console.error('Ошибка загрузки:', error);
+                showToast('❌ Ошибка загрузки: ' + error.message, 'error');
+                return null;
+            }
+        }
+
+        function getCurrentData() {
+            const data = {
+                version: '1.0',
+                exported: new Date().toISOString(),
+                salary: {},
+                settings: {}
+            };
+            const currentYear = new Date().getFullYear();
+            for (let y = currentYear; y >= 2010; y--) {
+                const key = 'salaryData_' + y;
+                try {
+                    const stored = localStorage.getItem(key);
+                    if (stored) {
+                        data.salary[y] = JSON.parse(stored);
+                    }
+                } catch(e) {}
+            }
+            try {
+                const settings = localStorage.getItem('dashboardSettings');
+                if (settings) {
+                    data.settings = JSON.parse(settings);
+                }
+            } catch(e) {}
+            return data;
+        }
+
+        function applyImportedData(data) {
+            if (!data.salary || typeof data.salary !== 'object') {
+                showToast('❌ Неверный формат данных', 'error');
+                return;
+            }
+            let count = 0;
+            for (const year in data.salary) {
+                if (data.salary.hasOwnProperty(year)) {
+                    const rows = data.salary[year];
+                    if (Array.isArray(rows) && rows.length === 12) {
+                        const key = 'salaryData_' + year;
+                        localStorage.setItem(key, JSON.stringify(rows));
+                        count++;
+                    }
+                }
+            }
+            if (data.settings) {
+                localStorage.setItem('dashboardSettings', JSON.stringify(data.settings));
+            }
+            const select = document.getElementById('yearSelect');
+            const currentYear = parseInt(select.value);
+            loadSalaryDataForYear(currentYear);
+            renderSalaryTable();
+            updateDashboard();
+            showToast(`✅ Импортировано ${count} лет данных!`, 'success');
+        }
+
+        document.getElementById('saveCloudBtn').addEventListener('click', async function() {
+            if (!state.authenticated) {
+                showToast('Требуется авторизация', 'warning');
+                return;
+            }
+            const data = getCurrentData();
+            await saveToYandexDisk(data);
+        });
+
+        document.getElementById('loadCloudBtn').addEventListener('click', async function() {
+            if (!state.authenticated) {
+                showToast('Требуется авторизация', 'warning');
+                return;
+            }
+            const data = await loadFromYandexDisk();
+            if (data) {
+                applyImportedData(data);
+            }
+        });
+
+        // ==========================================
+        // 17. СТАТИСТИКА ЗАРПЛАТЫ (с разбивкой на кварталы)
         // ==========================================
 
         const MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь',
@@ -2195,7 +2342,7 @@
         }
 
         // ==========================================
-        // 17. ДАШБОРД
+        // 18. ДАШБОРД
         // ==========================================
         function updateDashboard() {
             if (!state.authenticated) return;
@@ -2216,7 +2363,7 @@
         }
 
         // ==========================================
-        // 18. ДИАГРАММА ЗАРПЛАТЫ (без дата-лейблов)
+        // 19. ДИАГРАММА ЗАРПЛАТЫ (без дата-лейблов)
         // ==========================================
         let salaryChartInstance = null;
 
@@ -2477,7 +2624,7 @@
         }
 
         // ==========================================
-        // 19. КНОПКА ПОКАЗА ДИАГРАММЫ
+        // 20. КНОПКА ПОКАЗА ДИАГРАММЫ
         // ==========================================
         document.getElementById('showChartBtn').addEventListener('click', function() {
             const chartSection = document.getElementById('chartSection');
@@ -2500,7 +2647,7 @@
         });
 
         // ==========================================
-        // 20. ИНТЕРАКТИВНЫЙ ДАШБОРД (переход к месяцу)
+        // 21. ИНТЕРАКТИВНЫЙ ДАШБОРД (переход к месяцу)
         // ==========================================
         function scrollToMonth(monthName) {
             if (!monthName) return;
@@ -2542,7 +2689,7 @@
         });
 
         // ==========================================
-        // 21. УПРАВЛЕНИЕ ГОДАМИ
+        // 22. УПРАВЛЕНИЕ ГОДАМИ
         // ==========================================
         function initYearSelector() {
             const select = document.getElementById('yearSelect');
@@ -2567,7 +2714,7 @@
         }
 
         // ==========================================
-        // 22. СРАВНЕНИЕ ЛЕТ
+        // 23. СРАВНЕНИЕ ЛЕТ
         // ==========================================
         function updateCompareYears() {
             const select = document.getElementById('compareYearSelect');
@@ -2624,7 +2771,7 @@
         });
 
         // ==========================================
-        // 23. КВАРТАЛЬНАЯ РАЗБИВКА
+        // 24. КВАРТАЛЬНАЯ РАЗБИВКА
         // ==========================================
         document.querySelectorAll('input[name="quarterMode"]').forEach(radio => {
             radio.addEventListener('change', function() {
@@ -2635,7 +2782,7 @@
         });
 
         // ==========================================
-        // 24. ОБРАБОТЧИКИ ДЛЯ ГРАФИКОВ ЗАРПЛАТЫ
+        // 25. ОБРАБОТЧИКИ ДЛЯ ГРАФИКОВ ЗАРПЛАТЫ
         // ==========================================
         document.getElementById('salaryChartType').addEventListener('change', function() {
             state.salaryChartType = this.value;
@@ -2665,7 +2812,7 @@
         });
 
         // ==========================================
-        // 25. ИНИЦИАЛИЗАЦИЯ
+        // 26. ИНИЦИАЛИЗАЦИЯ
         // ==========================================
         function init() {
             loadSettings();
