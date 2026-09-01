@@ -883,6 +883,7 @@
             <label>Яндекс Диск</label>
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
                 <button class="action-btn" id="resetTokenBtn">🔄 Сбросить токен</button>
+                <button class="action-btn" id="checkTokenBtn">🔍 Проверить токен</button>
             </div>
             <div class="hint">Сбросить сохранённый токен Яндекс Диска (потребуется ввести заново).</div>
         </div>
@@ -1615,7 +1616,7 @@
         }
 
         // ==========================================
-        // 10. ЧАСЫ (с изменением: "рабочий день окончен" после 18:00)
+        // 10. ЧАСЫ (с "рабочий день окончен")
         // ==========================================
         function updateClock() {
             const now = new Date();
@@ -1937,7 +1938,7 @@
         setInterval(createBackup, 60000);
 
         // ==========================================
-        // 16. ИНТЕГРАЦИЯ С ЯНДЕКС ДИСК
+        // 16. ИНТЕГРАЦИЯ С ЯНДЕКС ДИСК (исправленная обработка ошибок)
         // ==========================================
         function getYandexToken() {
             return localStorage.getItem('yandexToken') || null;
@@ -1998,6 +1999,31 @@
             showToast('🔄 Токен сброшен', 'warning');
         });
 
+        // Проверка токена
+        document.getElementById('checkTokenBtn').addEventListener('click', async function() {
+            const token = getYandexToken();
+            if (!token) {
+                showToast('⚠️ Токен не задан', 'warning');
+                return;
+            }
+            try {
+                const resp = await fetch('https://cloud-api.yandex.net/v1/disk/resources?path=app:/', {
+                    headers: { 'Authorization': `OAuth ${token}` }
+                });
+                if (resp.ok) {
+                    showToast('✅ Токен действует', 'success');
+                } else if (resp.status === 401 || resp.status === 403) {
+                    showToast('❌ Токен недействителен', 'error');
+                    setYandexToken(null);
+                } else {
+                    showToast('⚠️ Ошибка проверки: ' + resp.status, 'warning');
+                }
+            } catch(e) {
+                showToast('❌ Ошибка сети', 'error');
+            }
+        });
+
+        // Функции сохранения/загрузки с исправленной обработкой ошибок
         async function saveToYandexDisk(data) {
             const token = getYandexToken();
             if (!token) {
@@ -2014,13 +2040,13 @@
                     }
                 );
                 if (!uploadUrlResponse.ok) {
-                    const errorText = await uploadUrlResponse.text();
-                    if (uploadUrlResponse.status === 401) {
-                        showToast('❌ Токен недействителен. Введите новый.', 'error');
+                    if (uploadUrlResponse.status === 401 || uploadUrlResponse.status === 403) {
+                        showToast('❌ Токен недействителен или истёк. Введите новый.', 'error');
                         setYandexToken(null);
                         showTokenModal();
                         return;
                     }
+                    const errorText = await uploadUrlResponse.text();
                     throw new Error(`Ошибка получения URL: ${errorText}`);
                 }
                 const uploadUrlData = await uploadUrlResponse.json();
@@ -2036,7 +2062,11 @@
                 showToast('✅ Данные сохранены в Яндекс Диск!', 'success');
             } catch (error) {
                 console.error('Ошибка сохранения:', error);
-                showToast('❌ Ошибка сохранения: ' + error.message, 'error');
+                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    showToast('❌ Ошибка сети. Проверьте интернет-соединение.', 'error');
+                } else {
+                    showToast('❌ Ошибка сохранения: ' + error.message, 'error');
+                }
             }
         }
 
@@ -2060,8 +2090,8 @@
                         showToast('ℹ️ Файл на Диске не найден. Сначала сохраните данные.', 'warning');
                         return null;
                     }
-                    if (downloadUrlResponse.status === 401) {
-                        showToast('❌ Токен недействителен. Введите новый.', 'error');
+                    if (downloadUrlResponse.status === 401 || downloadUrlResponse.status === 403) {
+                        showToast('❌ Токен недействителен или истёк. Введите новый.', 'error');
                         setYandexToken(null);
                         showTokenModal();
                         return null;
@@ -2070,7 +2100,9 @@
                     throw new Error(`Ошибка получения URL: ${errorText}`);
                 }
                 const downloadUrlData = await downloadUrlResponse.json();
-                const downloadResponse = await fetch(downloadUrlData.href);
+                // Добавляем параметр, чтобы избежать кеширования
+                const downloadUrl = downloadUrlData.href + '&_t=' + Date.now();
+                const downloadResponse = await fetch(downloadUrl);
                 if (!downloadResponse.ok) {
                     throw new Error(`Ошибка скачивания: ${downloadResponse.statusText}`);
                 }
@@ -2079,7 +2111,11 @@
                 return data;
             } catch (error) {
                 console.error('Ошибка загрузки:', error);
-                showToast('❌ Ошибка загрузки: ' + error.message, 'error');
+                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    showToast('❌ Ошибка сети. Проверьте интернет-соединение.', 'error');
+                } else {
+                    showToast('❌ Ошибка загрузки: ' + error.message, 'error');
+                }
                 return null;
             }
         }
@@ -2309,7 +2345,7 @@
         });
 
         // ==========================================
-        // 18. СТАТИСТИКА ЗАРПЛАТЫ (с разбивкой на кварталы)
+        // 18. СТАТИСТИКА ЗАРПЛАТЫ
         // ==========================================
 
         const MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь',
