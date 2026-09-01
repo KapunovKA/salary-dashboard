@@ -263,7 +263,7 @@
         .clock-widget { background:var(--clock-bg); padding:10px 24px; border-radius:60px; color:var(--clock-text); box-shadow:0 6px 14px rgba(20,30,60,0.15); border:1px solid var(--clock-border); transition:all var(--transition); cursor:default; backdrop-filter:blur(2px); white-space:nowrap; }
         .clock-widget:hover { background:var(--clock-hover); border-color:var(--clock-border); box-shadow:0 10px 24px rgba(0,20,60,0.2); transform:scale(1.02); }
         .clock-date { font-size:0.8rem; font-weight:400; letter-spacing:0.5px; color:#b2c6ed; margin-right:10px; }
-        .clock-time { font-size:1.3rem; font-weight:600; letter-spacing:1px; color:#ffffff; }
+        .clock-time { font-size:1.3rem; font-weight:600; letter-spacing:1px; color:#ffffff; transition:all var(--transition); }
 
         .weather-widget {
             background:var(--clock-bg);
@@ -613,7 +613,6 @@
             <button class="action-btn" id="exportBtn">📥 Экспорт JSON</button>
             <button class="action-btn" id="importBtn">📤 Импорт JSON</button>
             <button class="action-btn" id="pdfBtn">📄 PDF</button>
-            <!-- Новые кнопки для Яндекс Диска -->
             <button class="action-btn" id="saveCloudBtn">☁️ Сохранить в Яндекс</button>
             <button class="action-btn" id="loadCloudBtn">☁️ Загрузить из Яндекса</button>
             <button class="settings-btn" id="settingsBtn">⚙️ Настройки</button>
@@ -698,6 +697,7 @@
             <div class="salary-controls">
                 <label for="yearSelect">📅 Год:</label>
                 <select id="yearSelect"></select>
+                <button class="chart-btn" id="addYearBtn" style="background:var(--btn-success); color:#fff; border-color:var(--btn-success);">➕ Добавить год</button>
                 <button class="chart-btn" id="showChartBtn">📊 Диаграмма</button>
             </div>
         </div>
@@ -815,6 +815,45 @@
     </div>
 </div>
 
+<!-- ===== МОДАЛЬНОЕ ОКНО ДЛЯ ТОКЕНА ЯНДЕКС ===== -->
+<div class="modal-overlay" id="tokenModal">
+    <div class="modal-content" style="max-width:480px;">
+        <div class="modal-header">
+            <h3>🔑 Токен Яндекс Диска</h3>
+            <button class="modal-close" id="tokenModalClose">✕</button>
+        </div>
+        <div class="settings-group">
+            <label for="yandexTokenInput">Введите OAuth-токен</label>
+            <input type="password" id="yandexTokenInput" placeholder="Вставьте токен сюда">
+            <div class="hint" style="margin-top:8px;">
+                <a href="https://yandex.ru/dev/disk/poligon/" target="_blank" style="color:var(--btn-primary);">Получить токен</a>
+                (нажмите «Получить токен» и скопируйте)
+            </div>
+            <div class="login-error" id="tokenError" style="display:none;">Токен не может быть пустым</div>
+        </div>
+        <button class="action-btn" id="tokenSubmit" style="width:100%; justify-content:center; background:var(--btn-primary); color:#fff;">Сохранить токен</button>
+        <div style="margin-top:12px; text-align:right; font-size:0.75rem; color:var(--text-light);">
+            Токен будет сохранён в локальном хранилище браузера.
+        </div>
+    </div>
+</div>
+
+<!-- ===== МОДАЛЬНОЕ ОКНО ДЛЯ ДОБАВЛЕНИЯ ГОДА ===== -->
+<div class="modal-overlay" id="addYearModal">
+    <div class="modal-content" style="max-width:400px;">
+        <div class="modal-header">
+            <h3>➕ Добавить год</h3>
+            <button class="modal-close" id="addYearModalClose">✕</button>
+        </div>
+        <div class="settings-group">
+            <label for="newYearInput">Введите год (от 2010 до 2100)</label>
+            <input type="number" id="newYearInput" placeholder="Например, 2027" min="2010" max="2100">
+            <div class="login-error" id="addYearError" style="display:none;">Год уже существует или введён неверно</div>
+        </div>
+        <button class="action-btn" id="addYearSubmit" style="width:100%; justify-content:center; background:var(--btn-success); color:#fff;">Создать год</button>
+    </div>
+</div>
+
 <div class="modal-overlay" id="settingsModal">
     <div class="modal-content" style="max-width:520px;">
         <div class="modal-header">
@@ -839,6 +878,13 @@
                 <button class="action-btn" id="restoreBackupBtn">📂 Восстановить из бэкапа</button>
             </div>
             <div class="hint">Бэкап сохраняется в localStorage. Автоматический бэкап каждые 60 секунд (без уведомлений).</div>
+        </div>
+        <div class="settings-group">
+            <label>Яндекс Диск</label>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="action-btn" id="resetTokenBtn">🔄 Сбросить токен</button>
+            </div>
+            <div class="hint">Сбросить сохранённый токен Яндекс Диска (потребуется ввести заново).</div>
         </div>
         <div class="settings-group">
             <label>Автоматическая тема по времени</label>
@@ -884,7 +930,6 @@
         // ==========================================
         // 0. НАСТРОЙКИ И СОСТОЯНИЕ
         // ==========================================
-        // Оставляем только три валюты (USD, EUR, CNY)
         const CURRENCIES = ['usd', 'eur', 'cny'];
         const CONFIG = {
             labels: {
@@ -914,7 +959,7 @@
             rates: {},
             prevRates: {},
             history: {},
-            widgetOrder: ['usd', 'eur', 'cny'], // только три валюты
+            widgetOrder: ['usd', 'eur', 'cny'],
             currentWidget: 'usd',
             currentPeriod: 365,
             lastUpdate: null,
@@ -1131,7 +1176,7 @@
         });
 
         // ==========================================
-        // 3. ПОГОДА (без изменений)
+        // 3. ПОГОДА
         // ==========================================
         async function fetchWeather() {
             try {
@@ -1183,7 +1228,7 @@
         setInterval(fetchWeather, 600000);
 
         // ==========================================
-        // 4. ДАШБОРД С ТУЛТИПОМ (без изменений)
+        // 4. ДАШБОРД С ТУЛТИПОМ
         // ==========================================
         function generateTipData() {
             if (!state.authenticated) return;
@@ -1291,33 +1336,28 @@
                 return rates;
             } else {
                 document.getElementById('dataSource').textContent = '⚠️ Ошибка загрузки курсов ЦБ';
-                // Возвращаем объект с null, чтобы виджеты показали прочерки
                 return { usd: null, eur: null, cny: null };
             }
         }
 
         // ==========================================
-        // 6. ИСТОРИЯ (генерируем только для трёх валют)
+        // 6. ИСТОРИЯ
         // ==========================================
         function generateHistoryFromRates(rates, days = 365) {
             const history = {};
             CURRENCIES.forEach(key => {
                 const current = rates[key];
                 if (current === null || current === undefined) { history[key] = []; return; }
-                // Берём небольшие колебания для демонстрации, так как реальной истории у нас нет.
-                // Можно использовать последние 365 дней с лёгким трендом.
                 const arr = [];
                 const today = new Date();
                 for (let i = days - 1; i >= 0; i--) {
                     const d = new Date(today);
                     d.setDate(d.getDate() - i);
                     const dateStr = d.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' });
-                    // Генерируем небольшое случайное отклонение (до ±2%)
                     const rnd = 1 + (Math.random() - 0.5) * 0.04;
                     const value = current * rnd;
                     arr.push({ date: dateStr, value, timestamp: d.getTime() });
                 }
-                // Сортируем по времени (от старых к новым)
                 arr.sort((a,b) => a.timestamp - b.timestamp);
                 history[key] = arr;
             });
@@ -1325,7 +1365,7 @@
         }
 
         // ==========================================
-        // 7. ВИДЖЕТЫ (только для USD, EUR, CNY)
+        // 7. ВИДЖЕТЫ
         // ==========================================
         function formatNumber(num, decimals = 0) {
             if (num === null || num === undefined || isNaN(num)) return '—';
@@ -1428,7 +1468,7 @@
         }
 
         // ==========================================
-        // 9. ГРАФИК КУРСОВ (обновлён под три валюты)
+        // 9. ГРАФИК КУРСОВ
         // ==========================================
         function getHistoryForChart(type, days) { return (state.history[type] || []).slice(-days); }
         function getFormatFn(type) {
@@ -1575,14 +1615,21 @@
         }
 
         // ==========================================
-        // 10. ЧАСЫ (без изменений)
+        // 10. ЧАСЫ (с изменением: "рабочий день окончен" после 18:00)
         // ==========================================
         function updateClock() {
             const now = new Date();
             document.getElementById('current-date').textContent = now.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short',
                 year: 'numeric' });
-            document.getElementById('current-time').textContent = now.toLocaleTimeString('ru-RU', { hour: '2-digit',
-                minute: '2-digit' });
+            
+            const hours = now.getHours();
+            if (hours >= 18) {
+                document.getElementById('current-time').textContent = '🏁 Рабочий день окончен';
+            } else {
+                document.getElementById('current-time').textContent = now.toLocaleTimeString('ru-RU', { hour: '2-digit',
+                    minute: '2-digit' });
+            }
+
             const endWork = new Date(now);
             endWork.setHours(18, 0, 0, 0);
             const diffMs = endWork.getTime() - now.getTime();
@@ -1590,9 +1637,9 @@
             if (diffMs <= 0) remainStr = 'рабочий день завершён';
             else {
                 const diffMin = Math.floor(diffMs / 60000);
-                const hours = Math.floor(diffMin / 60);
-                const minutes = diffMin % 60;
-                remainStr = `${hours} ч ${minutes} мин`;
+                const hoursRem = Math.floor(diffMin / 60);
+                const minutesRem = diffMin % 60;
+                remainStr = `${hoursRem} ч ${minutesRem} мин`;
             }
             document.getElementById('work-remain').textContent = remainStr;
             document.getElementById('work-end-time').textContent = '18:00';
@@ -1625,7 +1672,7 @@
         });
 
         // ==========================================
-        // 12. ЭКСПОРТ / ИМПОРТ JSON (без изменений)
+        // 12. ЭКСПОРТ / ИМПОРТ JSON
         // ==========================================
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
@@ -1752,7 +1799,7 @@
         });
 
         // ==========================================
-        // 13. PDF ЭКСПОРТ (без изменений)
+        // 13. PDF ЭКСПОРТ
         // ==========================================
         document.getElementById('pdfBtn').addEventListener('click', function() {
             if (!state.authenticated) {
@@ -1798,7 +1845,7 @@
         });
 
         // ==========================================
-        // 14. НАСТРОЙКИ (убрали выбор источника)
+        // 14. НАСТРОЙКИ
         // ==========================================
         const settingsModal = document.getElementById('settingsModal');
         const settingsClose = document.getElementById('settingsClose');
@@ -1827,7 +1874,7 @@
         });
 
         // ==========================================
-        // 15. БЭКАП (убрали всплывающие уведомления)
+        // 15. БЭКАП
         // ==========================================
         function createBackup() {
             const backup = {
@@ -1892,12 +1939,70 @@
         // ==========================================
         // 16. ИНТЕГРАЦИЯ С ЯНДЕКС ДИСК
         // ==========================================
-        // !! ВСТАВЬТЕ СВОЙ ТОКЕН ЗДЕСЬ !!
-        const YANDEX_DISK_TOKEN = 'ваш_токен_здесь'; 
+        function getYandexToken() {
+            return localStorage.getItem('yandexToken') || null;
+        }
+
+        function setYandexToken(token) {
+            if (token) {
+                localStorage.setItem('yandexToken', token);
+            } else {
+                localStorage.removeItem('yandexToken');
+            }
+        }
+
+        function showTokenModal() {
+            document.getElementById('tokenModal').classList.add('active');
+            document.getElementById('yandexTokenInput').value = '';
+            document.getElementById('tokenError').style.display = 'none';
+            document.getElementById('yandexTokenInput').focus();
+        }
+
+        function hideTokenModal() {
+            document.getElementById('tokenModal').classList.remove('active');
+        }
+
+        document.getElementById('tokenModalClose').addEventListener('click', hideTokenModal);
+        document.getElementById('tokenModal').addEventListener('click', function(e) {
+            if (e.target === this) hideTokenModal();
+        });
+        document.getElementById('yandexTokenInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('tokenSubmit').click();
+            }
+        });
+
+        document.getElementById('tokenSubmit').addEventListener('click', function() {
+            const token = document.getElementById('yandexTokenInput').value.trim();
+            if (!token) {
+                document.getElementById('tokenError').style.display = 'block';
+                return;
+            }
+            document.getElementById('tokenError').style.display = 'none';
+            setYandexToken(token);
+            hideTokenModal();
+            showToast('✅ Токен сохранён', 'success');
+            if (window._pendingCloudAction) {
+                const action = window._pendingCloudAction;
+                window._pendingCloudAction = null;
+                if (action === 'save') {
+                    document.getElementById('saveCloudBtn').click();
+                } else if (action === 'load') {
+                    document.getElementById('loadCloudBtn').click();
+                }
+            }
+        });
+
+        document.getElementById('resetTokenBtn').addEventListener('click', function() {
+            setYandexToken(null);
+            showToast('🔄 Токен сброшен', 'warning');
+        });
 
         async function saveToYandexDisk(data) {
-            if (!YANDEX_DISK_TOKEN || YANDEX_DISK_TOKEN === 'ваш_токен_здесь') {
-                showToast('⚠️ Сначала укажите токен Яндекс Диска в коде', 'warning');
+            const token = getYandexToken();
+            if (!token) {
+                window._pendingCloudAction = 'save';
+                showTokenModal();
                 return;
             }
             try {
@@ -1905,11 +2010,17 @@
                     `https://cloud-api.yandex.net/v1/disk/resources/upload?path=app:/salary_data.json&overwrite=true`,
                     {
                         method: 'GET',
-                        headers: { 'Authorization': `OAuth ${YANDEX_DISK_TOKEN}` }
+                        headers: { 'Authorization': `OAuth ${token}` }
                     }
                 );
                 if (!uploadUrlResponse.ok) {
                     const errorText = await uploadUrlResponse.text();
+                    if (uploadUrlResponse.status === 401) {
+                        showToast('❌ Токен недействителен. Введите новый.', 'error');
+                        setYandexToken(null);
+                        showTokenModal();
+                        return;
+                    }
                     throw new Error(`Ошибка получения URL: ${errorText}`);
                 }
                 const uploadUrlData = await uploadUrlResponse.json();
@@ -1930,8 +2041,10 @@
         }
 
         async function loadFromYandexDisk() {
-            if (!YANDEX_DISK_TOKEN || YANDEX_DISK_TOKEN === 'ваш_токен_здесь') {
-                showToast('⚠️ Сначала укажите токен Яндекс Диска в коде', 'warning');
+            const token = getYandexToken();
+            if (!token) {
+                window._pendingCloudAction = 'load';
+                showTokenModal();
                 return null;
             }
             try {
@@ -1939,12 +2052,18 @@
                     `https://cloud-api.yandex.net/v1/disk/resources/download?path=app:/salary_data.json`,
                     {
                         method: 'GET',
-                        headers: { 'Authorization': `OAuth ${YANDEX_DISK_TOKEN}` }
+                        headers: { 'Authorization': `OAuth ${token}` }
                     }
                 );
                 if (!downloadUrlResponse.ok) {
                     if (downloadUrlResponse.status === 404) {
                         showToast('ℹ️ Файл на Диске не найден. Сначала сохраните данные.', 'warning');
+                        return null;
+                    }
+                    if (downloadUrlResponse.status === 401) {
+                        showToast('❌ Токен недействителен. Введите новый.', 'error');
+                        setYandexToken(null);
+                        showTokenModal();
                         return null;
                     }
                     const errorText = await downloadUrlResponse.text();
@@ -2039,7 +2158,158 @@
         });
 
         // ==========================================
-        // 17. СТАТИСТИКА ЗАРПЛАТЫ (с разбивкой на кварталы)
+        // 17. ДОБАВЛЕНИЕ НОВОГО ГОДА
+        // ==========================================
+        function refreshYearSelector() {
+            const select = document.getElementById('yearSelect');
+            const currentYear = new Date().getFullYear();
+            // Собираем все года из localStorage
+            const existingYears = [];
+            for (let y = 2010; y <= currentYear + 5; y++) {
+                const key = 'salaryData_' + y;
+                try {
+                    const stored = localStorage.getItem(key);
+                    if (stored) {
+                        existingYears.push(y);
+                    }
+                } catch(e) {}
+            }
+            // Если данных нет, добавляем текущий год с пустыми данными
+            if (existingYears.length === 0) {
+                // Создаём текущий год
+                const data = MONTHS.map((month) => ({
+                    month: month,
+                    organization: '',
+                    ndflRate: 13,
+                    salary: 0,
+                    advance: 0,
+                    baseSalary: 0,
+                    bonus: 0,
+                    vacation: 0
+                }));
+                const key = 'salaryData_' + currentYear;
+                localStorage.setItem(key, JSON.stringify(data));
+                existingYears.push(currentYear);
+            }
+            // Добавляем все года от минимального до максимального, если их нет
+            const minYear = Math.min(...existingYears);
+            const maxYear = Math.max(...existingYears);
+            for (let y = minYear; y <= maxYear; y++) {
+                if (!existingYears.includes(y)) {
+                    const data = MONTHS.map((month) => ({
+                        month: month,
+                        organization: '',
+                        ndflRate: 13,
+                        salary: 0,
+                        advance: 0,
+                        baseSalary: 0,
+                        bonus: 0,
+                        vacation: 0
+                    }));
+                    const key = 'salaryData_' + y;
+                    localStorage.setItem(key, JSON.stringify(data));
+                    existingYears.push(y);
+                }
+            }
+            // Сортируем по убыванию
+            existingYears.sort((a,b) => b - a);
+            // Заполняем select
+            const currentSelection = parseInt(select.value);
+            select.innerHTML = '';
+            existingYears.forEach(y => {
+                const option = document.createElement('option');
+                option.value = y;
+                option.textContent = y;
+                select.appendChild(option);
+            });
+            // Выбираем текущий год, если он есть, иначе первый
+            if (existingYears.includes(currentSelection)) {
+                select.value = currentSelection;
+            } else {
+                select.value = existingYears[0];
+            }
+            appState.currentYear = parseInt(select.value);
+        }
+
+        function addNewYear(year) {
+            // Проверяем, существует ли уже
+            const key = 'salaryData_' + year;
+            if (localStorage.getItem(key)) {
+                showToast('⚠️ Год уже существует', 'warning');
+                return false;
+            }
+            if (year < 2010 || year > 2100) {
+                showToast('❌ Год должен быть от 2010 до 2100', 'error');
+                return false;
+            }
+            // Создаём пустые данные
+            const data = MONTHS.map((month) => ({
+                month: month,
+                organization: '',
+                ndflRate: 13,
+                salary: 0,
+                advance: 0,
+                baseSalary: 0,
+                bonus: 0,
+                vacation: 0
+            }));
+            localStorage.setItem(key, JSON.stringify(data));
+            refreshYearSelector();
+            // Выбираем добавленный год
+            document.getElementById('yearSelect').value = year;
+            appState.currentYear = year;
+            renderSalaryTable();
+            updateDashboard();
+            showToast(`✅ Год ${year} добавлен`, 'success');
+            return true;
+        }
+
+        // Обработчик кнопки "Добавить год"
+        document.getElementById('addYearBtn').addEventListener('click', function() {
+            document.getElementById('addYearModal').classList.add('active');
+            document.getElementById('newYearInput').value = '';
+            document.getElementById('addYearError').style.display = 'none';
+            document.getElementById('newYearInput').focus();
+        });
+
+        document.getElementById('addYearModalClose').addEventListener('click', function() {
+            document.getElementById('addYearModal').classList.remove('active');
+        });
+        document.getElementById('addYearModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                document.getElementById('addYearModal').classList.remove('active');
+            }
+        });
+        document.getElementById('newYearInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('addYearSubmit').click();
+            }
+        });
+
+        document.getElementById('addYearSubmit').addEventListener('click', function() {
+            const year = parseInt(document.getElementById('newYearInput').value);
+            if (isNaN(year)) {
+                document.getElementById('addYearError').style.display = 'block';
+                document.getElementById('addYearError').textContent = 'Введите число';
+                return;
+            }
+            if (year < 2010 || year > 2100) {
+                document.getElementById('addYearError').style.display = 'block';
+                document.getElementById('addYearError').textContent = 'Год должен быть от 2010 до 2100';
+                return;
+            }
+            if (localStorage.getItem('salaryData_' + year)) {
+                document.getElementById('addYearError').style.display = 'block';
+                document.getElementById('addYearError').textContent = 'Год уже существует';
+                return;
+            }
+            document.getElementById('addYearError').style.display = 'none';
+            addNewYear(year);
+            document.getElementById('addYearModal').classList.remove('active');
+        });
+
+        // ==========================================
+        // 18. СТАТИСТИКА ЗАРПЛАТЫ (с разбивкой на кварталы)
         // ==========================================
 
         const MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь',
@@ -2342,7 +2612,7 @@
         }
 
         // ==========================================
-        // 18. ДАШБОРД
+        // 19. ДАШБОРД
         // ==========================================
         function updateDashboard() {
             if (!state.authenticated) return;
@@ -2363,7 +2633,7 @@
         }
 
         // ==========================================
-        // 19. ДИАГРАММА ЗАРПЛАТЫ (без дата-лейблов)
+        // 20. ДИАГРАММА ЗАРПЛАТЫ (без дата-лейблов)
         // ==========================================
         let salaryChartInstance = null;
 
@@ -2624,7 +2894,7 @@
         }
 
         // ==========================================
-        // 20. КНОПКА ПОКАЗА ДИАГРАММЫ
+        // 21. КНОПКА ПОКАЗА ДИАГРАММЫ
         // ==========================================
         document.getElementById('showChartBtn').addEventListener('click', function() {
             const chartSection = document.getElementById('chartSection');
@@ -2647,7 +2917,7 @@
         });
 
         // ==========================================
-        // 21. ИНТЕРАКТИВНЫЙ ДАШБОРД (переход к месяцу)
+        // 22. ИНТЕРАКТИВНЫЙ ДАШБОРД (переход к месяцу)
         // ==========================================
         function scrollToMonth(monthName) {
             if (!monthName) return;
@@ -2689,20 +2959,11 @@
         });
 
         // ==========================================
-        // 22. УПРАВЛЕНИЕ ГОДАМИ
+        // 23. УПРАВЛЕНИЕ ГОДАМИ
         // ==========================================
         function initYearSelector() {
+            refreshYearSelector();
             const select = document.getElementById('yearSelect');
-            const currentYear = new Date().getFullYear();
-            for (let y = currentYear; y >= 2010; y--) {
-                const option = document.createElement('option');
-                option.value = y;
-                option.textContent = y;
-                select.appendChild(option);
-            }
-            select.value = currentYear;
-            appState.currentYear = currentYear;
-            
             select.addEventListener('change', function() {
                 appState.currentYear = parseInt(this.value);
                 if (state.authenticated) {
@@ -2711,10 +2972,11 @@
                 }
                 updateCompareYears();
             });
+            appState.currentYear = parseInt(select.value);
         }
 
         // ==========================================
-        // 23. СРАВНЕНИЕ ЛЕТ
+        // 24. СРАВНЕНИЕ ЛЕТ
         // ==========================================
         function updateCompareYears() {
             const select = document.getElementById('compareYearSelect');
@@ -2771,7 +3033,7 @@
         });
 
         // ==========================================
-        // 24. КВАРТАЛЬНАЯ РАЗБИВКА
+        // 25. КВАРТАЛЬНАЯ РАЗБИВКА
         // ==========================================
         document.querySelectorAll('input[name="quarterMode"]').forEach(radio => {
             radio.addEventListener('change', function() {
@@ -2782,7 +3044,7 @@
         });
 
         // ==========================================
-        // 25. ОБРАБОТЧИКИ ДЛЯ ГРАФИКОВ ЗАРПЛАТЫ
+        // 26. ОБРАБОТЧИКИ ДЛЯ ГРАФИКОВ ЗАРПЛАТЫ
         // ==========================================
         document.getElementById('salaryChartType').addEventListener('change', function() {
             state.salaryChartType = this.value;
@@ -2812,7 +3074,7 @@
         });
 
         // ==========================================
-        // 26. ИНИЦИАЛИЗАЦИЯ
+        // 27. ИНИЦИАЛИЗАЦИЯ
         // ==========================================
         function init() {
             loadSettings();
