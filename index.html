@@ -1739,48 +1739,8 @@
                     if (!data.salary || typeof data.salary !== 'object') {
                         throw new Error('Неверный формат файла');
                     }
-                    let count = 0;
-                    for (const year in data.salary) {
-                        if (data.salary.hasOwnProperty(year)) {
-                            const rows = data.salary[year];
-                            if (Array.isArray(rows) && rows.length === 12) {
-                                const key = 'salaryData_' + year;
-                                localStorage.setItem(key, JSON.stringify(rows));
-                                count++;
-                            }
-                        }
-                    }
-                    
-                    if (data.settings) {
-                        if (data.settings.theme) applyTheme(data.settings.theme);
-                        if (data.settings.period) {
-                            state.currentPeriod = data.settings.period;
-                            document.querySelectorAll('.period-btn').forEach(b => {
-                                b.classList.remove('active');
-                                if (b.dataset.period == state.currentPeriod) b.classList.add('active');
-                            });
-                        }
-                        if (data.settings.notificationThreshold) state.notificationThreshold = data.settings.notificationThreshold;
-                        if (data.settings.notificationsEnabled !== undefined) state.notificationsEnabled = data.settings.notificationsEnabled;
-                        if (data.settings.salaryPeriod) state.salaryPeriod = data.settings.salaryPeriod;
-                        if (data.settings.salaryShowMovingAvg !== undefined) state.salaryShowMovingAvg = data.settings.salaryShowMovingAvg;
-                        if (data.settings.themeMode) state.themeMode = data.settings.themeMode;
-                        if (data.settings.quarterMode) state.quarterMode = data.settings.quarterMode;
-                        if (data.settings.compareYears) state.compareYears = data.settings.compareYears;
-                        saveSettings();
-                        document.getElementById('notificationThreshold').value = state.notificationThreshold;
-                        document.getElementById('notificationsEnabled').checked = state.notificationsEnabled;
-                        document.getElementById('salaryPeriod').value = state.salaryPeriod;
-                        document.getElementById('salaryShowMovingAvg').checked = state.salaryShowMovingAvg;
-                        document.querySelector('input[name="themeMode"][value="' + state.themeMode + '"]').checked = true;
-                    }
-                    
-                    const select = document.getElementById('yearSelect');
-                    const currentYear = parseInt(select.value);
-                    loadSalaryDataForYear(currentYear);
-                    renderSalaryTable();
-                    updateDashboard();
-                    showToast(`✅ Импортировано ${count} лет данных!`, 'success');
+                    // Применяем импортированные данные
+                    applyImportedData(data);
                 } catch(err) {
                     showToast('❌ Ошибка импорта: ' + err.message, 'error');
                 }
@@ -1938,7 +1898,7 @@
         setInterval(createBackup, 60000);
 
         // ==========================================
-        // 16. ИНТЕГРАЦИЯ С ЯНДЕКС ДИСК (исправленная обработка ошибок)
+        // 16. ИНТЕГРАЦИЯ С ЯНДЕКС ДИСК (ИСПРАВЛЕННАЯ)
         // ==========================================
         function getYandexToken() {
             return localStorage.getItem('yandexToken') || null;
@@ -1999,7 +1959,6 @@
             showToast('🔄 Токен сброшен', 'warning');
         });
 
-        // Проверка токена
         document.getElementById('checkTokenBtn').addEventListener('click', async function() {
             const token = getYandexToken();
             if (!token) {
@@ -2023,7 +1982,7 @@
             }
         });
 
-        // Функции сохранения/загрузки с исправленной обработкой ошибок
+        // ИСПРАВЛЕННЫЕ ФУНКЦИИ СОХРАНЕНИЯ/ЗАГРУЗКИ
         async function saveToYandexDisk(data) {
             const token = getYandexToken();
             if (!token) {
@@ -2100,13 +2059,14 @@
                     throw new Error(`Ошибка получения URL: ${errorText}`);
                 }
                 const downloadUrlData = await downloadUrlResponse.json();
-                const downloadUrl = downloadUrlData.href + '&_t=' + Date.now();
-                // ВАЖНО: передаём токен и при запросе по прямой ссылке
-                const downloadResponse = await fetch(downloadUrl, {
-                    headers: {
-                        'Authorization': `OAuth ${token}`
-                    }
-                });
+                let downloadUrl = downloadUrlData.href;
+                // Добавляем access_token в URL (без заголовка Authorization, чтобы не было CORS конфликта)
+                if (!downloadUrl.includes('access_token')) {
+                    const separator = downloadUrl.includes('?') ? '&' : '?';
+                    downloadUrl += separator + 'access_token=' + token;
+                }
+                downloadUrl += '&_t=' + Date.now();
+                const downloadResponse = await fetch(downloadUrl);
                 if (!downloadResponse.ok) {
                     if (downloadResponse.status === 401 || downloadResponse.status === 403) {
                         showToast('❌ Токен недействителен или истёк. Введите новый.', 'error');
@@ -2174,10 +2134,42 @@
             }
             if (data.settings) {
                 localStorage.setItem('dashboardSettings', JSON.stringify(data.settings));
+                if (data.settings.theme) applyTheme(data.settings.theme);
+                if (data.settings.period) {
+                    state.currentPeriod = data.settings.period;
+                    document.querySelectorAll('.period-btn').forEach(b => {
+                        b.classList.remove('active');
+                        if (b.dataset.period == state.currentPeriod) b.classList.add('active');
+                    });
+                }
+                // обновляем остальные настройки
+                if (data.settings.notificationThreshold) state.notificationThreshold = data.settings.notificationThreshold;
+                if (data.settings.notificationsEnabled !== undefined) state.notificationsEnabled = data.settings.notificationsEnabled;
+                if (data.settings.salaryPeriod) state.salaryPeriod = data.settings.salaryPeriod;
+                if (data.settings.salaryShowMovingAvg !== undefined) state.salaryShowMovingAvg = data.settings.salaryShowMovingAvg;
+                if (data.settings.themeMode) state.themeMode = data.settings.themeMode;
+                if (data.settings.quarterMode) state.quarterMode = data.settings.quarterMode;
+                if (data.settings.compareYears) state.compareYears = data.settings.compareYears;
             }
+            // ОБНОВЛЯЕМ СПИСОК ГОДОВ
+            refreshYearSelector();
+            // Выбираем последний доступный год (максимальный)
             const select = document.getElementById('yearSelect');
-            const currentYear = parseInt(select.value);
-            loadSalaryDataForYear(currentYear);
+            if (select.options.length > 0) {
+                const maxYear = parseInt(select.options[0].value);
+                select.value = maxYear;
+                appState.currentYear = maxYear;
+            } else {
+                const currentYear = new Date().getFullYear();
+                appState.currentYear = currentYear;
+                const emptyData = MONTHS.map(m => ({ month: m, organization: '', ndflRate: 13, salary: 0, advance: 0, baseSalary: 0, bonus: 0, vacation: 0 }));
+                localStorage.setItem('salaryData_' + currentYear, JSON.stringify(emptyData));
+                refreshYearSelector();
+                select.value = currentYear;
+                appState.currentYear = currentYear;
+            }
+            // Загружаем данные для выбранного года
+            loadSalaryDataForYear(appState.currentYear);
             renderSalaryTable();
             updateDashboard();
             showToast(`✅ Импортировано ${count} лет данных!`, 'success');
@@ -2209,7 +2201,6 @@
         function refreshYearSelector() {
             const select = document.getElementById('yearSelect');
             const currentYear = new Date().getFullYear();
-            // Собираем все года из localStorage
             const existingYears = [];
             for (let y = 2010; y <= currentYear + 5; y++) {
                 const key = 'salaryData_' + y;
@@ -2220,9 +2211,7 @@
                     }
                 } catch(e) {}
             }
-            // Если данных нет, добавляем текущий год с пустыми данными
             if (existingYears.length === 0) {
-                // Создаём текущий год
                 const data = MONTHS.map((month) => ({
                     month: month,
                     organization: '',
@@ -2237,29 +2226,7 @@
                 localStorage.setItem(key, JSON.stringify(data));
                 existingYears.push(currentYear);
             }
-            // Добавляем все года от минимального до максимального, если их нет
-            const minYear = Math.min(...existingYears);
-            const maxYear = Math.max(...existingYears);
-            for (let y = minYear; y <= maxYear; y++) {
-                if (!existingYears.includes(y)) {
-                    const data = MONTHS.map((month) => ({
-                        month: month,
-                        organization: '',
-                        ndflRate: 13,
-                        salary: 0,
-                        advance: 0,
-                        baseSalary: 0,
-                        bonus: 0,
-                        vacation: 0
-                    }));
-                    const key = 'salaryData_' + y;
-                    localStorage.setItem(key, JSON.stringify(data));
-                    existingYears.push(y);
-                }
-            }
-            // Сортируем по убыванию
             existingYears.sort((a,b) => b - a);
-            // Заполняем select
             const currentSelection = parseInt(select.value);
             select.innerHTML = '';
             existingYears.forEach(y => {
@@ -2268,7 +2235,6 @@
                 option.textContent = y;
                 select.appendChild(option);
             });
-            // Выбираем текущий год, если он есть, иначе первый
             if (existingYears.includes(currentSelection)) {
                 select.value = currentSelection;
             } else {
@@ -2278,7 +2244,6 @@
         }
 
         function addNewYear(year) {
-            // Проверяем, существует ли уже
             const key = 'salaryData_' + year;
             if (localStorage.getItem(key)) {
                 showToast('⚠️ Год уже существует', 'warning');
@@ -2288,7 +2253,6 @@
                 showToast('❌ Год должен быть от 2010 до 2100', 'error');
                 return false;
             }
-            // Создаём пустые данные
             const data = MONTHS.map((month) => ({
                 month: month,
                 organization: '',
@@ -2301,7 +2265,6 @@
             }));
             localStorage.setItem(key, JSON.stringify(data));
             refreshYearSelector();
-            // Выбираем добавленный год
             document.getElementById('yearSelect').value = year;
             appState.currentYear = year;
             renderSalaryTable();
@@ -2310,7 +2273,6 @@
             return true;
         }
 
-        // Обработчик кнопки "Добавить год"
         document.getElementById('addYearBtn').addEventListener('click', function() {
             document.getElementById('addYearModal').classList.add('active');
             document.getElementById('newYearInput').value = '';
