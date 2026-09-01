@@ -889,12 +889,13 @@
             <div class="hint">Сбросить сохранённый токен Яндекс Диска (потребуется ввести заново).</div>
         </div>
         <div class="settings-group">
-            <label>Автоматическая тема по времени</label>
+            <label>Режим темы</label>
             <div class="inline">
                 <label><input type="radio" name="themeMode" value="manual" checked> Ручная</label>
-                <label><input type="radio" name="themeMode" value="auto"> Авто (по времени)</label>
+                <label><input type="radio" name="themeMode" value="system"> Как в системе</label>
+                <label><input type="radio" name="themeMode" value="auto"> По времени</label>
             </div>
-            <div class="hint">В автоматическом режиме светлая тема с 6:00 до 18:00, тёмная в остальное время.</div>
+            <div class="hint">«Как в системе» следует теме браузера или ОС и меняется сразу. «По времени» включает светлую тему с 6:00 до 18:00.</div>
         </div>
         <div style="margin-top:12px; text-align:right; font-size:0.75rem; color:var(--text-light);">
             Настройки сохраняются автоматически.
@@ -974,7 +975,7 @@
             salaryPeriod: 1,
             salaryShowMovingAvg: 1,
             backupInterval: null,
-            themeMode: 'manual',
+            themeMode: 'system',
             quarterMode: 'month',
             compareYears: [],
             authenticated: false,
@@ -1024,6 +1025,8 @@
             } catch(e) {}
         }
 
+        const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
         function applyTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             state.theme = theme;
@@ -1035,7 +1038,7 @@
             redrawCharts();
         }
         function toggleTheme() {
-            if (state.themeMode === 'auto') {
+            if (state.themeMode !== 'manual') {
                 state.themeMode = 'manual';
                 document.querySelector('input[name="themeMode"][value="manual"]').checked = true;
             }
@@ -1054,15 +1057,33 @@
         }
 
         function autoThemeCheck() {
-            if (state.themeMode === 'auto') {
+            let targetTheme = state.theme;
+
+            if (state.themeMode === 'system') {
+                targetTheme = systemThemeQuery.matches ? 'dark' : 'light';
+            } else if (state.themeMode === 'auto') {
                 const hours = new Date().getHours();
                 const isDay = hours >= 6 && hours < 18;
-                const targetTheme = isDay ? 'light' : 'dark';
-                if (state.theme !== targetTheme) {
-                    applyTheme(targetTheme);
-                }
+                targetTheme = isDay ? 'light' : 'dark';
+            }
+
+            if (state.theme !== targetTheme) {
+                applyTheme(targetTheme);
             }
         }
+
+        function handleSystemThemeChange(event) {
+            if (state.themeMode === 'system') {
+                applyTheme(event.matches ? 'dark' : 'light');
+            }
+        }
+
+        if (typeof systemThemeQuery.addEventListener === 'function') {
+            systemThemeQuery.addEventListener('change', handleSystemThemeChange);
+        } else if (typeof systemThemeQuery.addListener === 'function') {
+            systemThemeQuery.addListener(handleSystemThemeChange);
+        }
+
         setInterval(autoThemeCheck, 600000);
 
         // ==========================================
@@ -1825,6 +1846,7 @@
             state.notificationsEnabled = document.getElementById('notificationsEnabled').checked;
             state.themeMode = document.querySelector('input[name="themeMode"]:checked').value;
             saveSettings();
+            autoThemeCheck();
             refreshAll();
         }
 
@@ -2185,7 +2207,7 @@
             }
             if (data.settings) {
                 localStorage.setItem('dashboardSettings', JSON.stringify(data.settings));
-                if (data.settings.theme) applyTheme(data.settings.theme);
+                if (data.settings.theme) state.theme = data.settings.theme;
                 if (data.settings.period) {
                     state.currentPeriod = data.settings.period;
                     document.querySelectorAll('.period-btn').forEach(b => {
@@ -2200,6 +2222,7 @@
                 if (data.settings.themeMode) state.themeMode = data.settings.themeMode;
                 if (data.settings.quarterMode) state.quarterMode = data.settings.quarterMode;
                 if (data.settings.compareYears) state.compareYears = data.settings.compareYears;
+                autoThemeCheck();
             }
             refreshYearSelector();
             const select = document.getElementById('yearSelect');
@@ -3149,7 +3172,14 @@
         // ==========================================
         function init() {
             loadSettings();
-            applyTheme(state.theme);
+            if (!['manual', 'system', 'auto'].includes(state.themeMode)) {
+                state.themeMode = 'system';
+            }
+            if (state.themeMode === 'manual') {
+                applyTheme(state.theme);
+            } else {
+                autoThemeCheck();
+            }
 
             document.getElementById('notificationThreshold').value = state.notificationThreshold;
             document.getElementById('notificationsEnabled').checked = state.notificationsEnabled;
