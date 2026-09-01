@@ -1981,7 +1981,7 @@
             }
         });
 
-        // Сохранение – без изменений (работает)
+        // Сохранение – работает
         async function saveToYandexDisk(data) {
             const token = getYandexToken();
             if (!token) {
@@ -2028,16 +2028,19 @@
             }
         }
 
-        // ЗАГРУЗКА – используем XMLHttpRequest для обхода CORS в Safari
+        // ЗАГРУЗКА – используем XMLHttpRequest с логами
         async function loadFromYandexDisk() {
+            console.log('[Яндекс] loadFromYandexDisk вызвана');
             const token = getYandexToken();
             if (!token) {
+                console.log('[Яндекс] Токен отсутствует, показываем модалку');
                 window._pendingCloudAction = 'load';
                 showTokenModal();
                 return null;
             }
+            console.log('[Яндекс] Токен есть, начинаем загрузку');
             try {
-                // Получаем ссылку на скачивание
+                console.log('[Яндекс] Запрашиваем ссылку на скачивание...');
                 const downloadUrlResponse = await fetch(
                     `https://cloud-api.yandex.net/v1/disk/resources/download?path=app:/salary_data.json`,
                     {
@@ -2045,6 +2048,7 @@
                         headers: { 'Authorization': `OAuth ${token}` }
                     }
                 );
+                console.log('[Яндекс] Ответ на получение ссылки:', downloadUrlResponse.status);
                 if (!downloadUrlResponse.ok) {
                     if (downloadUrlResponse.status === 404) {
                         showToast('ℹ️ Файл на Диске не найден. Сначала сохраните данные.', 'warning');
@@ -2061,20 +2065,21 @@
                 }
                 const downloadUrlData = await downloadUrlResponse.json();
                 let downloadUrl = downloadUrlData.href;
-                // Добавляем access_token в URL (без заголовка Authorization)
                 if (!downloadUrl.includes('access_token')) {
                     const separator = downloadUrl.includes('?') ? '&' : '?';
                     downloadUrl += separator + 'access_token=' + token;
                 }
                 downloadUrl += '&_t=' + Date.now();
+                console.log('[Яндекс] Ссылка на скачивание:', downloadUrl);
 
-                // Используем XMLHttpRequest вместо fetch
+                // Используем XMLHttpRequest
                 return new Promise((resolve, reject) => {
                     const xhr = new XMLHttpRequest();
                     xhr.open('GET', downloadUrl, true);
                     xhr.responseType = 'json';
-                    xhr.timeout = 30000; // 30 секунд
+                    xhr.timeout = 30000;
                     xhr.onload = function() {
+                        console.log('[Яндекс] XHR статус:', xhr.status);
                         if (xhr.status === 200) {
                             try {
                                 const data = xhr.response;
@@ -2095,6 +2100,7 @@
                         }
                     };
                     xhr.onerror = function() {
+                        console.error('[Яндекс] XHR onerror');
                         reject(new Error('Ошибка сети при загрузке файла'));
                     };
                     xhr.ontimeout = function() {
@@ -2103,12 +2109,8 @@
                     xhr.send();
                 });
             } catch (error) {
-                console.error('Ошибка загрузки:', error);
-                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-                    showToast('❌ Ошибка сети. Проверьте интернет-соединение.', 'error');
-                } else {
-                    showToast('❌ Ошибка загрузки: ' + error.message, 'error');
-                }
+                console.error('[Яндекс] Ошибка в loadFromYandexDisk:', error);
+                showToast('❌ Ошибка загрузки: ' + error.message, 'error');
                 return null;
             }
         }
@@ -2165,7 +2167,6 @@
                         if (b.dataset.period == state.currentPeriod) b.classList.add('active');
                     });
                 }
-                // обновляем остальные настройки
                 if (data.settings.notificationThreshold) state.notificationThreshold = data.settings.notificationThreshold;
                 if (data.settings.notificationsEnabled !== undefined) state.notificationsEnabled = data.settings.notificationsEnabled;
                 if (data.settings.salaryPeriod) state.salaryPeriod = data.settings.salaryPeriod;
@@ -2174,9 +2175,7 @@
                 if (data.settings.quarterMode) state.quarterMode = data.settings.quarterMode;
                 if (data.settings.compareYears) state.compareYears = data.settings.compareYears;
             }
-            // ОБНОВЛЯЕМ СПИСОК ГОДОВ
             refreshYearSelector();
-            // Выбираем последний доступный год (максимальный)
             const select = document.getElementById('yearSelect');
             if (select.options.length > 0) {
                 const maxYear = parseInt(select.options[0].value);
@@ -2191,14 +2190,15 @@
                 select.value = currentYear;
                 appState.currentYear = currentYear;
             }
-            // Загружаем данные для выбранного года
             loadSalaryDataForYear(appState.currentYear);
             renderSalaryTable();
             updateDashboard();
             showToast(`✅ Импортировано ${count} лет данных!`, 'success');
         }
 
+        // Обработчики кнопок с логированием
         document.getElementById('saveCloudBtn').addEventListener('click', async function() {
+            console.log('[Кнопка] Сохранить в Яндексе нажата');
             if (!state.authenticated) {
                 showToast('Требуется авторизация', 'warning');
                 return;
@@ -2208,6 +2208,7 @@
         });
 
         document.getElementById('loadCloudBtn').addEventListener('click', async function() {
+            console.log('[Кнопка] Загрузить из Яндекса нажата');
             if (!state.authenticated) {
                 showToast('Требуется авторизация', 'warning');
                 return;
