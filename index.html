@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Дашборд зарплаты</title>
+    <title>Р”Р°С€Р±РѕСЂРґ Р·Р°СЂРїР»Р°С‚С‹</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%234a7bc4' stroke-width='1.5' d='M2 12 L5 8 L8 10 L11 5 L14 7'/%3E%3Crect x='1' y='13' width='14' height='1.5' fill='%234a7bc4'/%3E%3C/svg%3E">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
     <style>
-        /* ===== CSS переменные для тем ===== */
+        /* ===== CSS РїРµСЂРµРјРµРЅРЅС‹Рµ РґР»СЏ С‚РµРј ===== */
         :root {
             --bg-body: #f0f4fd;
             --bg-dashboard: #ffffff;
@@ -137,12 +137,12 @@
             --quarter-border: #3b4a6b;
         }
 
-        /* ===== Общие стили ===== */
+        /* ===== РћР±С‰РёРµ СЃС‚РёР»Рё ===== */
         * { margin:0; padding:0; box-sizing:border-box; font-family:system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; }
         body { background:var(--bg-body); min-height:100vh; display:flex; align-items:flex-start; justify-content:center; padding:20px 24px; margin:0; transition:background var(--transition), color var(--transition); }
         .dashboard { width:100%; max-width:100%; background:var(--bg-dashboard); border-radius:44px; box-shadow:var(--shadow); padding:28px 36px 32px; transition:all var(--transition); box-sizing:border-box; }
 
-        /* ===== Анимации ===== */
+        /* ===== РђРЅРёРјР°С†РёРё ===== */
         @keyframes fadeInUp {
             from { opacity:0; transform:translateY(12px); }
             to { opacity:1; transform:translateY(0); }
@@ -164,7 +164,7 @@
         .fade-in { animation:fadeInUp 0.5s ease forwards; }
         .pulse { animation:pulseGlow 1s ease 1; }
 
-        /* ===== Верхняя панель ===== */
+        /* ===== Р’РµСЂС…РЅСЏСЏ РїР°РЅРµР»СЊ ===== */
         .top-bar { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px 20px; margin-bottom:20px; }
         .top-bar-left { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
         .top-bar-left .action-btn, .top-bar-left .settings-btn { background:var(--bg-widget); border:1px solid var(--border-widget); border-radius:40px; padding:8px 16px; cursor:pointer; font-size:0.85rem; color:var(--text-secondary); transition:all var(--transition); display:flex; align-items:center; gap:6px; }
@@ -172,7 +172,7 @@
         .top-bar-left .action-btn:active, .top-bar-left .settings-btn:active { transform:scale(0.95); }
         .file-input-hidden { display:none; }
 
-        /* ===== Кнопка входа/выхода ===== */
+        /* ===== РљРЅРѕРїРєР° РІС…РѕРґР°/РІС‹С…РѕРґР° ===== */
         .login-btn {
             border: none;
             border-radius: 40px;
@@ -218,7 +218,7 @@
             pointer-events: none;
         }
 
-        /* ===== СТАТУС-БАР ===== */
+        /* ===== РЎРўРђРўРЈРЎ-Р‘РђР  ===== */
         .status-bar {
             margin: 0 0 12px 0;
             font-size: 0.75rem;
@@ -239,7 +239,7 @@
         .status-bar .auth-status.authorized { color: var(--change-positive); }
         .status-bar .auth-status.unauthorized { color: var(--change-negative); }
 
-        /* ===== Виджеты ===== */
+        /* ===== Р’РёРґР¶РµС‚С‹ ===== */
         .widget-row { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:20px 30px; width:100%; }
         .left-widgets { display:flex; flex-wrap:wrap; align-items:center; gap:14px 20px; flex:1 1 auto; min-width:0; }
         .widget-item { background:var(--bg-widget); padding:10px 20px; border-radius:60px; box-shadow:0 2px 6px rgba(0,0,0,0.02); transition:all var(--transition); cursor:pointer; border:1px solid var(--border-widget); backdrop-filter:blur(2px); white-space:nowrap; user-select:none; position:relative; display:flex; align-items:center; gap:8px; animation:fadeInUp 0.5s ease both; }
@@ -287,7 +287,7 @@
         .weather-widget .weather-desc { opacity:0.8; font-size:0.75rem; }
         .weather-widget .weather-error { color:var(--change-negative); font-size:0.75rem; }
 
-        /* ===== Тултипы ===== */
+        /* ===== РўСѓР»С‚РёРїС‹ ===== */
         .tooltip-container { position:relative; display:inline-block; }
         .tooltip-box { visibility:hidden; opacity:0; transition:opacity 0.2s ease, transform 0.15s ease; position:absolute; z-index:100; background:var(--tooltip-bg); border-radius:22px; padding:16px 20px 18px; min-width:230px; max-width:320px; box-shadow:var(--modal-shadow); border:1px solid var(--tooltip-border); backdrop-filter:blur(6px); pointer-events:none; transform:translateY(6px); color:var(--text-primary); }
         .tooltip-container:hover .tooltip-box { visibility:visible; opacity:1; transform:translateY(0px); }
@@ -306,7 +306,7 @@
         .workday-info p { display:flex; justify-content:space-between; font-size:0.9rem; padding:2px 0; }
         .workday-info .highlight { font-weight:600; color:var(--text-primary); }
 
-        /* ===== Модальные окна ===== */
+        /* ===== РњРѕРґР°Р»СЊРЅС‹Рµ РѕРєРЅР° ===== */
         .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.45); backdrop-filter:blur(4px); z-index:999; align-items:center; justify-content:center; animation:fadeIn 0.25s ease; }
         .modal-overlay.active { display:flex; }
         .modal-content { background:var(--modal-bg); border-radius:32px; padding:28px 32px 24px; max-width:800px; width:92%; box-shadow:var(--modal-shadow); animation:slideUp 0.3s ease; position:relative; color:var(--text-primary); max-height:90vh; overflow-y:auto; }
@@ -334,7 +334,7 @@
         .chart-compare input[type="checkbox"] { accent-color:var(--btn-primary); cursor:pointer; }
         .click-hint { font-size:0.65rem; color:var(--text-light); margin-top:8px; text-align:center; opacity:0.7; }
 
-        /* ===== Настройки ===== */
+        /* ===== РќР°СЃС‚СЂРѕР№РєРё ===== */
         .settings-group { margin-bottom:20px; }
         .settings-group label { display:block; font-weight:500; color:var(--text-secondary); margin-bottom:6px; font-size:0.9rem; }
         .settings-group select, .settings-group input { width:100%; padding:8px 12px; border-radius:40px; border:1px solid var(--border-widget); background:var(--bg-widget); color:var(--text-primary); font-size:0.9rem; outline:none; transition:all var(--transition); }
@@ -344,7 +344,7 @@
         .settings-group .inline label { margin-bottom:0; }
         .settings-group .hint { font-size:0.75rem; color:var(--text-light); margin-top:4px; }
 
-        /* ===== Дашборд ===== */
+        /* ===== Р”Р°С€Р±РѕСЂРґ ===== */
         .dashboard-section { margin-bottom:24px; padding:16px 20px; background:var(--bg-widget); border-radius:24px; border:1px solid var(--border-widget); }
         .dashboard-section h3 { font-size:1.1rem; font-weight:600; color:var(--text-primary); margin-bottom:12px; }
         .dashboard-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:12px; }
@@ -355,7 +355,7 @@
         .dashboard-card .value { font-size:1.3rem; font-weight:600; color:var(--text-primary); margin-top:4px; transition:all var(--transition); }
         .dashboard-card .value.pulse { animation:pulseGlow 1s ease 1; }
 
-        /* Тултип для дашборда (только для максимума и минимума) */
+        /* РўСѓР»С‚РёРї РґР»СЏ РґР°С€Р±РѕСЂРґР° (С‚РѕР»СЊРєРѕ РґР»СЏ РјР°РєСЃРёРјСѓРјР° Рё РјРёРЅРёРјСѓРјР°) */
         .dash-tooltip {
             visibility: hidden;
             opacity: 0;
@@ -385,7 +385,7 @@
         .dash-tooltip .tip-value { font-weight:600; color:var(--text-primary); }
         .dash-tooltip .tip-item.highlight { background:var(--highlight-bg); border-radius:4px; padding:2px 6px; margin:0 -6px; }
 
-        /* ===== Блок статистики зарплаты ===== */
+        /* ===== Р‘Р»РѕРє СЃС‚Р°С‚РёСЃС‚РёРєРё Р·Р°СЂРїР»Р°С‚С‹ ===== */
         .salary-section { margin-top:32px; padding-top:20px; border-top:2px solid var(--border-color); }
         .salary-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:18px; }
         .salary-header h2 { font-size:1.3rem; font-weight:600; color:var(--text-primary); }
@@ -427,7 +427,7 @@
         .salary-table .money-cell { font-weight:500; color:var(--text-primary); }
         .salary-table .highlight-row td { background:var(--highlight-bg); animation:highlightRow 2s ease; }
 
-        /* ---- СТРОКИ КВАРТАЛОВ ---- */
+        /* ---- РЎРўР РћРљР РљР’РђР РўРђР›РћР’ ---- */
         .salary-table .quarter-row {
             background: var(--quarter-bg);
             border-top: 2px solid var(--quarter-border);
@@ -444,7 +444,7 @@
             color: var(--status-color);
         }
 
-        /* ===== ДИАГРАММА ЗАРПЛАТЫ (улучшенная) ===== */
+        /* ===== Р”РРђР“Р РђРњРњРђ Р—РђР РџР›РђРўР« (СѓР»СѓС‡С€РµРЅРЅР°СЏ) ===== */
         .chart-salary-wrapper {
             display: none;
             margin-top:16px;
@@ -561,7 +561,7 @@
 
         .login-error { color:var(--change-negative); font-size:0.85rem; margin-top:8px; display:none; }
 
-        /* ===== Адаптация ===== */
+        /* ===== РђРґР°РїС‚Р°С†РёСЏ ===== */
         @media (max-width:768px) {
             body { padding:12px; }
             .dashboard { padding:16px; border-radius:28px; }
@@ -606,158 +606,158 @@
 <body>
 <div class="dashboard" id="dashboard">
 
-    <!-- Верхняя панель -->
+    <!-- Р’РµСЂС…РЅСЏСЏ РїР°РЅРµР»СЊ -->
     <div class="top-bar">
         <div class="top-bar-left">
-            <button class="action-btn" id="themeToggle"><span id="themeIcon">🌙</span> <span id="themeLabel">Тёмная</span></button>
-            <button class="action-btn" id="exportBtn">📥 Экспорт JSON</button>
-            <button class="action-btn" id="importBtn">📤 Импорт JSON</button>
-            <button class="action-btn" id="pdfBtn">📄 PDF</button>
-            <button class="action-btn" id="saveCloudBtn">☁️ Сохранить в Яндекс</button>
-            <button class="action-btn" id="loadCloudBtn">☁️ Загрузить из Яндекса</button>
-            <button class="settings-btn" id="settingsBtn">⚙️ Настройки</button>
+            <button class="action-btn" id="themeToggle"><span id="themeIcon">рџЊ™</span> <span id="themeLabel">РўС‘РјРЅР°СЏ</span></button>
+            <button class="action-btn" id="exportBtn">рџ“Ґ Р­РєСЃРїРѕСЂС‚ JSON</button>
+            <button class="action-btn" id="importBtn">рџ“¤ РРјРїРѕСЂС‚ JSON</button>
+            <button class="action-btn" id="pdfBtn">рџ“„ PDF</button>
+            <button class="action-btn" id="saveCloudBtn">вЃпёЏ РЎРѕС…СЂР°РЅРёС‚СЊ РІ РЇРЅРґРµРєСЃ</button>
+            <button class="action-btn" id="loadCloudBtn">вЃпёЏ Р—Р°РіСЂСѓР·РёС‚СЊ РёР· РЇРЅРґРµРєСЃР°</button>
+            <button class="settings-btn" id="settingsBtn">вљ™пёЏ РќР°СЃС‚СЂРѕР№РєРё</button>
             <input type="file" id="fileInput" class="file-input-hidden" accept=".json">
         </div>
         <div class="top-bar-right">
             <button class="login-btn" id="loginBtn">
                 <span class="pulse-ring"></span>
-                <span class="icon" id="loginIcon">🔐</span>
-                <span id="loginLabel">Войти</span>
+                <span class="icon" id="loginIcon">рџ”ђ</span>
+                <span id="loginLabel">Р’РѕР№С‚Рё</span>
             </button>
         </div>
     </div>
 
-    <!-- ===== СТАТУС-БАР ===== -->
+    <!-- ===== РЎРўРђРўРЈРЎ-Р‘РђР  ===== -->
     <div class="status-bar">
-        <span><span class="source">📊 Источник: </span><span id="dataSource">Официальный API ЦБ РФ</span></span>
-        <span><span>🔄 обновлено: </span><span class="update-time" id="lastUpdate">—</span></span>
-        <span id="authStatus" class="auth-status authorized">✅ Авторизован</span>
+        <span><span class="source">рџ“Љ РСЃС‚РѕС‡РЅРёРє: </span><span id="dataSource">РћС„РёС†РёР°Р»СЊРЅС‹Р№ API Р¦Р‘ Р Р¤</span></span>
+        <span><span>рџ”„ РѕР±РЅРѕРІР»РµРЅРѕ: </span><span class="update-time" id="lastUpdate">вЂ”</span></span>
+        <span id="authStatus" class="auth-status authorized">вњ… РђРІС‚РѕСЂРёР·РѕРІР°РЅ</span>
     </div>
 
-    <!-- Виджеты -->
+    <!-- Р’РёРґР¶РµС‚С‹ -->
     <div class="widget-row">
         <div class="left-widgets" id="widgetContainer"></div>
         <div class="right-widget">
             <div class="tooltip-container">
                 <div class="clock-widget">
-                    <span class="clock-date" id="current-date">—</span>
+                    <span class="clock-date" id="current-date">вЂ”</span>
                     <span class="clock-time" id="current-time">--:--</span>
                 </div>
                 <div class="tooltip-box">
-                    <div class="tooltip-title">⏳ Рабочий день (РФ)</div>
+                    <div class="tooltip-title">вЏі Р Р°Р±РѕС‡РёР№ РґРµРЅСЊ (Р Р¤)</div>
                     <div class="workday-info">
-                        <p><span>Начало</span> <span class="highlight">09:00</span></p>
-                        <p><span>Окончание</span> <span class="highlight" id="work-end-time">18:00</span></p>
-                        <p><span>Перерыв</span> <span>12:00–13:00</span></p>
-                        <p style="margin-top:8px; font-size:0.8rem;"><span>⏱️ до конца дня</span> <span id="work-remain">—</span></p>
+                        <p><span>РќР°С‡Р°Р»Рѕ</span> <span class="highlight">09:00</span></p>
+                        <p><span>РћРєРѕРЅС‡Р°РЅРёРµ</span> <span class="highlight" id="work-end-time">18:00</span></p>
+                        <p><span>РџРµСЂРµСЂС‹РІ</span> <span>12:00вЂ“13:00</span></p>
+                        <p style="margin-top:8px; font-size:0.8rem;"><span>вЏ±пёЏ РґРѕ РєРѕРЅС†Р° РґРЅСЏ</span> <span id="work-remain">вЂ”</span></p>
                     </div>
-                    <div class="tooltip-footer">трудовой кодекс РФ</div>
+                    <div class="tooltip-footer">С‚СЂСѓРґРѕРІРѕР№ РєРѕРґРµРєСЃ Р Р¤</div>
                 </div>
             </div>
             <div class="weather-widget" id="weatherWidget">
-                <span class="weather-icon" id="weatherIcon">⏳</span>
-                <span class="weather-temp" id="weatherTemp">--°C</span>
-                <span class="weather-desc" id="weatherDesc">загрузка...</span>
+                <span class="weather-icon" id="weatherIcon">вЏі</span>
+                <span class="weather-temp" id="weatherTemp">--В°C</span>
+                <span class="weather-desc" id="weatherDesc">Р·Р°РіСЂСѓР·РєР°...</span>
             </div>
         </div>
     </div>
 
-    <!-- ===== ДАШБОРД ===== -->
+    <!-- ===== Р”РђРЁР‘РћР Р” ===== -->
     <div class="dashboard-section" id="dashboardSection">
-        <h3>📊 Ключевые показатели</h3>
+        <h3>рџ“Љ РљР»СЋС‡РµРІС‹Рµ РїРѕРєР°Р·Р°С‚РµР»Рё</h3>
         <div class="dashboard-grid" id="dashboardGrid">
             <div class="dashboard-card" id="cardTotal">
-                <div class="label">Общая сумма за год</div>
-                <div class="value" id="dashTotal">—</div>
+                <div class="label">РћР±С‰Р°СЏ СЃСѓРјРјР° Р·Р° РіРѕРґ</div>
+                <div class="value" id="dashTotal">вЂ”</div>
             </div>
             <div class="dashboard-card" id="cardAvg">
-                <div class="label">Средняя зарплата</div>
-                <div class="value" id="dashAvg">—</div>
+                <div class="label">РЎСЂРµРґРЅСЏСЏ Р·Р°СЂРїР»Р°С‚Р°</div>
+                <div class="value" id="dashAvg">вЂ”</div>
             </div>
             <div class="dashboard-card" id="cardMax" data-tip="max">
-                <div class="label">Максимум</div>
-                <div class="value" id="dashMax">—</div>
+                <div class="label">РњР°РєСЃРёРјСѓРј</div>
+                <div class="value" id="dashMax">вЂ”</div>
             </div>
             <div class="dashboard-card" id="cardMin" data-tip="min">
-                <div class="label">Минимум</div>
-                <div class="value" id="dashMin">—</div>
+                <div class="label">РњРёРЅРёРјСѓРј</div>
+                <div class="value" id="dashMin">вЂ”</div>
             </div>
             <div class="dashboard-card" id="cardCount">
-                <div class="label">Кол-во месяцев</div>
-                <div class="value" id="dashCount">—</div>
+                <div class="label">РљРѕР»-РІРѕ РјРµСЃСЏС†РµРІ</div>
+                <div class="value" id="dashCount">вЂ”</div>
             </div>
         </div>
         <div class="dash-tooltip" id="dashTooltip"></div>
     </div>
 
-    <!-- ===== БЛОК СТАТИСТИКИ ЗАРПЛАТЫ ===== -->
+    <!-- ===== Р‘Р›РћРљ РЎРўРђРўРРЎРўРРљР Р—РђР РџР›РђРўР« ===== -->
     <div class="salary-section">
         <div class="salary-header">
-            <h2>📋 Статистика зарплаты</h2>
+            <h2>рџ“‹ РЎС‚Р°С‚РёСЃС‚РёРєР° Р·Р°СЂРїР»Р°С‚С‹</h2>
             <div class="salary-controls">
-                <label for="yearSelect">📅 Год:</label>
+                <label for="yearSelect">рџ“… Р“РѕРґ:</label>
                 <select id="yearSelect"></select>
-                <button class="chart-btn" id="addYearBtn" style="background:var(--btn-success); color:#fff; border-color:var(--btn-success);">➕ Добавить год</button>
-                <button class="chart-btn" id="showChartBtn">📊 Диаграмма</button>
+                <button class="chart-btn" id="addYearBtn" style="background:var(--btn-success); color:#fff; border-color:var(--btn-success);">вћ• Р”РѕР±Р°РІРёС‚СЊ РіРѕРґ</button>
+                <button class="chart-btn" id="showChartBtn">рџ“Љ Р”РёР°РіСЂР°РјРјР°</button>
             </div>
         </div>
         <div class="table-wrapper">
             <table class="salary-table" id="salaryTable">
                 <thead>
                     <tr>
-                        <th>Месяц</th>
-                        <th>Организация</th>
-                        <th>НДФЛ (%)</th>
-                        <th>Оклад (₽)</th>
-                        <th>Аванс (₽)</th>
-                        <th>Зарплата (₽)</th>
-                        <th>Премия (₽)</th>
-                        <th>Отпускные (₽)</th>
-                        <th>Итого (₽)</th>
+                        <th>РњРµСЃСЏС†</th>
+                        <th>РћСЂРіР°РЅРёР·Р°С†РёСЏ</th>
+                        <th>РќР”Р¤Р› (%)</th>
+                        <th>РћРєР»Р°Рґ (в‚Ѕ)</th>
+                        <th>РђРІР°РЅСЃ (в‚Ѕ)</th>
+                        <th>Р—Р°СЂРїР»Р°С‚Р° (в‚Ѕ)</th>
+                        <th>РџСЂРµРјРёСЏ (в‚Ѕ)</th>
+                        <th>РћС‚РїСѓСЃРєРЅС‹Рµ (в‚Ѕ)</th>
+                        <th>РС‚РѕРіРѕ (в‚Ѕ)</th>
                     </tr>
                 </thead>
                 <tbody id="salaryBody">
-                    <!-- строки будут добавлены JS -->
+                    <!-- СЃС‚СЂРѕРєРё Р±СѓРґСѓС‚ РґРѕР±Р°РІР»РµРЅС‹ JS -->
                 </tbody>
                 <tfoot id="salaryFooter">
-                    <!-- будет создано JS -->
+                    <!-- Р±СѓРґРµС‚ СЃРѕР·РґР°РЅРѕ JS -->
                 </tfoot>
             </table>
         </div>
 
-        <!-- ===== ДИАГРАММА ЗАРПЛАТЫ (улучшенная) ===== -->
+        <!-- ===== Р”РРђР“Р РђРњРњРђ Р—РђР РџР›РђРўР« (СѓР»СѓС‡С€РµРЅРЅР°СЏ) ===== -->
         <div class="chart-salary-wrapper" id="chartSection">
             <div class="chart-header">
-                <h4>📈 Анализ зарплаты</h4>
-                <span class="period-label" id="periodLabel">Период: —</span>
+                <h4>рџ“€ РђРЅР°Р»РёР· Р·Р°СЂРїР»Р°С‚С‹</h4>
+                <span class="period-label" id="periodLabel">РџРµСЂРёРѕРґ: вЂ”</span>
                 <div class="chart-controls">
                     <label>
-                        Период:
+                        РџРµСЂРёРѕРґ:
                         <select id="salaryPeriod">
-                            <option value="1">1 год</option>
-                            <option value="3">3 года</option>
-                            <option value="5">5 лет</option>
-                            <option value="10">10 лет</option>
+                            <option value="1">1 РіРѕРґ</option>
+                            <option value="3">3 РіРѕРґР°</option>
+                            <option value="5">5 Р»РµС‚</option>
+                            <option value="10">10 Р»РµС‚</option>
                         </select>
                     </label>
                     <label>
-                        Тип:
+                        РўРёРї:
                         <select id="salaryChartType">
-                            <option value="bar">Столбцы</option>
-                            <option value="line">Линия</option>
+                            <option value="bar">РЎС‚РѕР»Р±С†С‹</option>
+                            <option value="line">Р›РёРЅРёСЏ</option>
                         </select>
                     </label>
                     <label>
-                        <input type="checkbox" id="showMovingAvg" checked> Сглаживание
+                        <input type="checkbox" id="showMovingAvg" checked> РЎРіР»Р°Р¶РёРІР°РЅРёРµ
                     </label>
                     <div class="quarter-selector">
-                        <label><input type="radio" name="quarterMode" value="month" checked> Месяцы</label>
-                        <label><input type="radio" name="quarterMode" value="quarter"> Кварталы</label>
+                        <label><input type="radio" name="quarterMode" value="month" checked> РњРµСЃСЏС†С‹</label>
+                        <label><input type="radio" name="quarterMode" value="quarter"> РљРІР°СЂС‚Р°Р»С‹</label>
                     </div>
                     <div class="year-multiselect">
-                        <label><input type="checkbox" id="compareYearToggle"> Сравнить годы</label>
+                        <label><input type="checkbox" id="compareYearToggle"> РЎСЂР°РІРЅРёС‚СЊ РіРѕРґС‹</label>
                         <select id="compareYearSelect" disabled style="display:none;">
-                            <option value="">Выберите год</option>
+                            <option value="">Р’С‹Р±РµСЂРёС‚Рµ РіРѕРґ</option>
                         </select>
                     </div>
                 </div>
@@ -766,33 +766,33 @@
                 <canvas id="salaryChartCanvas"></canvas>
             </div>
             <div class="chart-salary-info" id="salaryChartInfo">
-                <span>📊 Средняя: <span class="value" id="avgSalary">—</span></span>
-                <span>📈 Макс: <span class="value" id="maxSalary">—</span></span>
-                <span>📉 Мин: <span class="value" id="minSalary">—</span></span>
-                <span>📅 Всего месяцев: <span class="value" id="totalMonths">—</span></span>
-                <span id="forecastLabel" style="display:none;">🔮 Прогноз на след. месяц: <span class="value forecast-highlight" id="forecastValue">—</span></span>
+                <span>рџ“Љ РЎСЂРµРґРЅСЏСЏ: <span class="value" id="avgSalary">вЂ”</span></span>
+                <span>рџ“€ РњР°РєСЃ: <span class="value" id="maxSalary">вЂ”</span></span>
+                <span>рџ“‰ РњРёРЅ: <span class="value" id="minSalary">вЂ”</span></span>
+                <span>рџ“… Р’СЃРµРіРѕ РјРµСЃСЏС†РµРІ: <span class="value" id="totalMonths">вЂ”</span></span>
+                <span id="forecastLabel" style="display:none;">рџ”® РџСЂРѕРіРЅРѕР· РЅР° СЃР»РµРґ. РјРµСЃСЏС†: <span class="value forecast-highlight" id="forecastValue">вЂ”</span></span>
             </div>
         </div>
 
         <div style="margin-top:8px; font-size:0.75rem; color:var(--text-light);">
-            💡 Кликните по любой ячейке для редактирования (кроме месяца и итоговой строки). Данные сохраняются автоматически.
+            рџ’Ў РљР»РёРєРЅРёС‚Рµ РїРѕ Р»СЋР±РѕР№ СЏС‡РµР№РєРµ РґР»СЏ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ (РєСЂРѕРјРµ РјРµСЃСЏС†Р° Рё РёС‚РѕРіРѕРІРѕР№ СЃС‚СЂРѕРєРё). Р”Р°РЅРЅС‹Рµ СЃРѕС…СЂР°РЅСЏСЋС‚СЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё.
         </div>
     </div>
 </div>
 
-<!-- ===== Модальные окна ===== -->
+<!-- ===== РњРѕРґР°Р»СЊРЅС‹Рµ РѕРєРЅР° ===== -->
 <div class="modal-overlay" id="chartModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 id="modalTitle">USD/RUB <small>динамика</small></h3>
-            <button class="modal-close" id="modalClose">✕</button>
+            <h3 id="modalTitle">USD/RUB <small>РґРёРЅР°РјРёРєР°</small></h3>
+            <button class="modal-close" id="modalClose">вњ•</button>
         </div>
         <div class="period-selector" id="periodSelector">
-            <button class="period-btn" data-period="7">7 дней</button>
-            <button class="period-btn" data-period="30">30 дней</button>
-            <button class="period-btn" data-period="90">3 месяца</button>
-            <button class="period-btn" data-period="180">6 месяцев</button>
-            <button class="period-btn active" data-period="365">1 год</button>
+            <button class="period-btn" data-period="7">7 РґРЅРµР№</button>
+            <button class="period-btn" data-period="30">30 РґРЅРµР№</button>
+            <button class="period-btn" data-period="90">3 РјРµСЃСЏС†Р°</button>
+            <button class="period-btn" data-period="180">6 РјРµСЃСЏС†РµРІ</button>
+            <button class="period-btn active" data-period="365">1 РіРѕРґ</button>
         </div>
         <div class="chart-compare" id="compareContainer">
             <label><input type="checkbox" data-compare="eur"> EUR</label>
@@ -804,99 +804,99 @@
             </div>
             <div class="chart-footer">
                 <div class="chart-stats">
-                    <span><span class="dot-up">▲</span> рост</span>
-                    <span><span class="dot-down">▼</span> падение</span>
-                    <span id="chartChange">изменение: —</span>
+                    <span><span class="dot-up">в–І</span> СЂРѕСЃС‚</span>
+                    <span><span class="dot-down">в–ј</span> РїР°РґРµРЅРёРµ</span>
+                    <span id="chartChange">РёР·РјРµРЅРµРЅРёРµ: вЂ”</span>
                 </div>
-                <span id="chartPeriod">последний год</span>
+                <span id="chartPeriod">РїРѕСЃР»РµРґРЅРёР№ РіРѕРґ</span>
             </div>
         </div>
-        <div class="click-hint">✕ нажмите вне окна или на крестик, чтобы закрыть</div>
+        <div class="click-hint">вњ• РЅР°Р¶РјРёС‚Рµ РІРЅРµ РѕРєРЅР° РёР»Рё РЅР° РєСЂРµСЃС‚РёРє, С‡С‚РѕР±С‹ Р·Р°РєСЂС‹С‚СЊ</div>
     </div>
 </div>
 
-<!-- ===== МОДАЛЬНОЕ ОКНО ДЛЯ ТОКЕНА ЯНДЕКС ===== -->
+<!-- ===== РњРћР”РђР›Р¬РќРћР• РћРљРќРћ Р”Р›РЇ РўРћРљР•РќРђ РЇРќР”Р•РљРЎ ===== -->
 <div class="modal-overlay" id="tokenModal">
     <div class="modal-content" style="max-width:480px;">
         <div class="modal-header">
-            <h3>🔑 Токен Яндекс Диска</h3>
-            <button class="modal-close" id="tokenModalClose">✕</button>
+            <h3>рџ”‘ РўРѕРєРµРЅ РЇРЅРґРµРєСЃ Р”РёСЃРєР°</h3>
+            <button class="modal-close" id="tokenModalClose">вњ•</button>
         </div>
         <div class="settings-group">
-            <label for="yandexTokenInput">Введите OAuth-токен</label>
-            <input type="password" id="yandexTokenInput" placeholder="Вставьте токен сюда">
+            <label for="yandexTokenInput">Р’РІРµРґРёС‚Рµ OAuth-С‚РѕРєРµРЅ</label>
+            <input type="password" id="yandexTokenInput" placeholder="Р’СЃС‚Р°РІСЊС‚Рµ С‚РѕРєРµРЅ СЃСЋРґР°">
             <div class="hint" style="margin-top:8px;">
-                <a href="https://yandex.ru/dev/disk/poligon/" target="_blank" style="color:var(--btn-primary);">Получить токен</a>
-                (нажмите «Получить токен» и скопируйте)
+                <a href="https://yandex.ru/dev/disk/poligon/" target="_blank" style="color:var(--btn-primary);">РџРѕР»СѓС‡РёС‚СЊ С‚РѕРєРµРЅ</a>
+                (РЅР°Р¶РјРёС‚Рµ В«РџРѕР»СѓС‡РёС‚СЊ С‚РѕРєРµРЅВ» Рё СЃРєРѕРїРёСЂСѓР№С‚Рµ)
             </div>
-            <div class="login-error" id="tokenError" style="display:none;">Токен не может быть пустым</div>
+            <div class="login-error" id="tokenError" style="display:none;">РўРѕРєРµРЅ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј</div>
         </div>
-        <button class="action-btn" id="tokenSubmit" style="width:100%; justify-content:center; background:var(--btn-primary); color:#fff;">Сохранить токен</button>
+        <button class="action-btn" id="tokenSubmit" style="width:100%; justify-content:center; background:var(--btn-primary); color:#fff;">РЎРѕС…СЂР°РЅРёС‚СЊ С‚РѕРєРµРЅ</button>
         <div style="margin-top:12px; text-align:right; font-size:0.75rem; color:var(--text-light);">
-            Токен будет сохранён в локальном хранилище браузера.
+            РўРѕРєРµРЅ Р±СѓРґРµС‚ СЃРѕС…СЂР°РЅС‘РЅ РІ Р»РѕРєР°Р»СЊРЅРѕРј С…СЂР°РЅРёР»РёС‰Рµ Р±СЂР°СѓР·РµСЂР°.
         </div>
     </div>
 </div>
 
-<!-- ===== МОДАЛЬНОЕ ОКНО ДЛЯ ДОБАВЛЕНИЯ ГОДА ===== -->
+<!-- ===== РњРћР”РђР›Р¬РќРћР• РћРљРќРћ Р”Р›РЇ Р”РћР‘РђР’Р›Р•РќРРЇ Р“РћР”Рђ ===== -->
 <div class="modal-overlay" id="addYearModal">
     <div class="modal-content" style="max-width:400px;">
         <div class="modal-header">
-            <h3>➕ Добавить год</h3>
-            <button class="modal-close" id="addYearModalClose">✕</button>
+            <h3>вћ• Р”РѕР±Р°РІРёС‚СЊ РіРѕРґ</h3>
+            <button class="modal-close" id="addYearModalClose">вњ•</button>
         </div>
         <div class="settings-group">
-            <label for="newYearInput">Введите год (от 2010 до 2100)</label>
-            <input type="number" id="newYearInput" placeholder="Например, 2027" min="2010" max="2100">
-            <div class="login-error" id="addYearError" style="display:none;">Год уже существует или введён неверно</div>
+            <label for="newYearInput">Р’РІРµРґРёС‚Рµ РіРѕРґ (РѕС‚ 2010 РґРѕ 2100)</label>
+            <input type="number" id="newYearInput" placeholder="РќР°РїСЂРёРјРµСЂ, 2027" min="2010" max="2100">
+            <div class="login-error" id="addYearError" style="display:none;">Р“РѕРґ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ РёР»Рё РІРІРµРґС‘РЅ РЅРµРІРµСЂРЅРѕ</div>
         </div>
-        <button class="action-btn" id="addYearSubmit" style="width:100%; justify-content:center; background:var(--btn-success); color:#fff;">Создать год</button>
+        <button class="action-btn" id="addYearSubmit" style="width:100%; justify-content:center; background:var(--btn-success); color:#fff;">РЎРѕР·РґР°С‚СЊ РіРѕРґ</button>
     </div>
 </div>
 
 <div class="modal-overlay" id="settingsModal">
     <div class="modal-content" style="max-width:520px;">
         <div class="modal-header">
-            <h3>⚙️ Настройки</h3>
-            <button class="modal-close" id="settingsClose">✕</button>
+            <h3>вљ™пёЏ РќР°СЃС‚СЂРѕР№РєРё</h3>
+            <button class="modal-close" id="settingsClose">вњ•</button>
         </div>
         <div class="settings-group">
-            <label for="notificationThreshold">Уведомление при изменении курса (%)</label>
+            <label for="notificationThreshold">РЈРІРµРґРѕРјР»РµРЅРёРµ РїСЂРё РёР·РјРµРЅРµРЅРёРё РєСѓСЂСЃР° (%)</label>
             <div class="inline">
                 <input type="number" id="notificationThreshold" value="2" min="0.1" step="0.1">
                 <span style="color:var(--text-muted);">%</span>
                 <label style="display:inline-flex; align-items:center; gap:6px; margin-left:12px;">
-                    <input type="checkbox" id="notificationsEnabled" checked> Включить
+                    <input type="checkbox" id="notificationsEnabled" checked> Р’РєР»СЋС‡РёС‚СЊ
                 </label>
             </div>
-            <div class="hint">При изменении курса более чем на указанный процент будет показано уведомление.</div>
+            <div class="hint">РџСЂРё РёР·РјРµРЅРµРЅРёРё РєСѓСЂСЃР° Р±РѕР»РµРµ С‡РµРј РЅР° СѓРєР°Р·Р°РЅРЅС‹Р№ РїСЂРѕС†РµРЅС‚ Р±СѓРґРµС‚ РїРѕРєР°Р·Р°РЅРѕ СѓРІРµРґРѕРјР»РµРЅРёРµ.</div>
         </div>
         <div class="settings-group">
-            <label>Бэкап данных</label>
+            <label>Р‘СЌРєР°Рї РґР°РЅРЅС‹С…</label>
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                <button class="action-btn" id="backupNowBtn">💾 Создать бэкап</button>
-                <button class="action-btn" id="restoreBackupBtn">📂 Восстановить из бэкапа</button>
+                <button class="action-btn" id="backupNowBtn">рџ’ѕ РЎРѕР·РґР°С‚СЊ Р±СЌРєР°Рї</button>
+                <button class="action-btn" id="restoreBackupBtn">рџ“‚ Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ РёР· Р±СЌРєР°РїР°</button>
             </div>
-            <div class="hint">Бэкап сохраняется в localStorage. Автоматический бэкап каждые 60 секунд (без уведомлений).</div>
+            <div class="hint">Р‘СЌРєР°Рї СЃРѕС…СЂР°РЅСЏРµС‚СЃСЏ РІ localStorage. РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРёР№ Р±СЌРєР°Рї РєР°Р¶РґС‹Рµ 60 СЃРµРєСѓРЅРґ (Р±РµР· СѓРІРµРґРѕРјР»РµРЅРёР№).</div>
         </div>
         <div class="settings-group">
-            <label>Яндекс Диск</label>
+            <label>РЇРЅРґРµРєСЃ Р”РёСЃРє</label>
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                <button class="action-btn" id="resetTokenBtn">🔄 Сбросить токен</button>
-                <button class="action-btn" id="checkTokenBtn">🔍 Проверить токен</button>
+                <button class="action-btn" id="resetTokenBtn">рџ”„ РЎР±СЂРѕСЃРёС‚СЊ С‚РѕРєРµРЅ</button>
+                <button class="action-btn" id="checkTokenBtn">рџ”Ќ РџСЂРѕРІРµСЂРёС‚СЊ С‚РѕРєРµРЅ</button>
             </div>
-            <div class="hint">Сбросить сохранённый токен Яндекс Диска (потребуется ввести заново).</div>
+            <div class="hint">РЎР±СЂРѕСЃРёС‚СЊ СЃРѕС…СЂР°РЅС‘РЅРЅС‹Р№ С‚РѕРєРµРЅ РЇРЅРґРµРєСЃ Р”РёСЃРєР° (РїРѕС‚СЂРµР±СѓРµС‚СЃСЏ РІРІРµСЃС‚Рё Р·Р°РЅРѕРІРѕ).</div>
         </div>
         <div class="settings-group">
-            <label>Автоматическая тема по времени</label>
+            <label>РђРІС‚РѕРјР°С‚РёС‡РµСЃРєР°СЏ С‚РµРјР° РїРѕ РІСЂРµРјРµРЅРё</label>
             <div class="inline">
-                <label><input type="radio" name="themeMode" value="manual" checked> Ручная</label>
-                <label><input type="radio" name="themeMode" value="auto"> Авто (по времени)</label>
+                <label><input type="radio" name="themeMode" value="manual" checked> Р СѓС‡РЅР°СЏ</label>
+                <label><input type="radio" name="themeMode" value="auto"> РђРІС‚Рѕ (РїРѕ РІСЂРµРјРµРЅРё)</label>
             </div>
-            <div class="hint">В автоматическом режиме светлая тема с 6:00 до 18:00, тёмная в остальное время.</div>
+            <div class="hint">Р’ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРј СЂРµР¶РёРјРµ СЃРІРµС‚Р»Р°СЏ С‚РµРјР° СЃ 6:00 РґРѕ 18:00, С‚С‘РјРЅР°СЏ РІ РѕСЃС‚Р°Р»СЊРЅРѕРµ РІСЂРµРјСЏ.</div>
         </div>
         <div style="margin-top:12px; text-align:right; font-size:0.75rem; color:var(--text-light);">
-            Настройки сохраняются автоматически.
+            РќР°СЃС‚СЂРѕР№РєРё СЃРѕС…СЂР°РЅСЏСЋС‚СЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё.
         </div>
     </div>
 </div>
@@ -904,19 +904,19 @@
 <div class="modal-overlay" id="loginModal">
     <div class="modal-content" style="max-width:400px;">
         <div class="modal-header">
-            <h3>🔐 Авторизация</h3>
-            <button class="modal-close" id="loginModalClose">✕</button>
+            <h3>рџ”ђ РђРІС‚РѕСЂРёР·Р°С†РёСЏ</h3>
+            <button class="modal-close" id="loginModalClose">вњ•</button>
         </div>
         <div class="settings-group">
-            <label for="loginUsername">Логин</label>
-            <input type="text" id="loginUsername" placeholder="Введите логин">
+            <label for="loginUsername">Р›РѕРіРёРЅ</label>
+            <input type="text" id="loginUsername" placeholder="Р’РІРµРґРёС‚Рµ Р»РѕРіРёРЅ">
         </div>
         <div class="settings-group">
-            <label for="loginPassword">Пароль</label>
-            <input type="password" id="loginPassword" placeholder="Введите пароль">
-            <div class="login-error" id="loginError">Неверный логин или пароль</div>
+            <label for="loginPassword">РџР°СЂРѕР»СЊ</label>
+            <input type="password" id="loginPassword" placeholder="Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ">
+            <div class="login-error" id="loginError">РќРµРІРµСЂРЅС‹Р№ Р»РѕРіРёРЅ РёР»Рё РїР°СЂРѕР»СЊ</div>
         </div>
-        <button class="action-btn" id="loginSubmit" style="width:100%; justify-content:center; background:var(--btn-primary); color:#fff;">Войти</button>
+        <button class="action-btn" id="loginSubmit" style="width:100%; justify-content:center; background:var(--btn-primary); color:#fff;">Р’РѕР№С‚Рё</button>
     </div>
 </div>
 
@@ -929,19 +929,19 @@
         "use strict";
 
         // ==========================================
-        // 0. НАСТРОЙКИ И СОСТОЯНИЕ
+        // 0. РќРђРЎРўР РћР™РљР Р РЎРћРЎРўРћРЇРќРР•
         // ==========================================
         const CURRENCIES = ['usd', 'eur', 'cny'];
         const CONFIG = {
             labels: {
-                usd: { icon: '💵', label: 'USD' },
-                eur: { icon: '💶', label: 'EUR' },
-                cny: { icon: '¥', label: 'CNY' }
+                usd: { icon: 'рџ’µ', label: 'USD' },
+                eur: { icon: 'рџ’¶', label: 'EUR' },
+                cny: { icon: 'ВҐ', label: 'CNY' }
             },
             signs: {
-                usd: '₽',
-                eur: '₽',
-                cny: '₽'
+                usd: 'в‚Ѕ',
+                eur: 'в‚Ѕ',
+                cny: 'в‚Ѕ'
             },
             colors: {
                 usd: '#4a7bc4',
@@ -983,7 +983,7 @@
         };
 
         // ==========================================
-        // 1. ТЕМА И НАСТРОЙКИ
+        // 1. РўР•РњРђ Р РќРђРЎРўР РћР™РљР
         // ==========================================
         function loadSettings() {
             try {
@@ -1028,8 +1028,8 @@
             state.theme = theme;
             const icon = document.getElementById('themeIcon');
             const label = document.getElementById('themeLabel');
-            if (theme === 'dark') { icon.textContent = '☀️'; label.textContent = 'Светлая'; }
-            else { icon.textContent = '🌙'; label.textContent = 'Тёмная'; }
+            if (theme === 'dark') { icon.textContent = 'вЂпёЏ'; label.textContent = 'РЎРІРµС‚Р»Р°СЏ'; }
+            else { icon.textContent = 'рџЊ™'; label.textContent = 'РўС‘РјРЅР°СЏ'; }
             saveSettings();
             redrawCharts();
         }
@@ -1065,7 +1065,7 @@
         setInterval(autoThemeCheck, 600000);
 
         // ==========================================
-        // 2. АВТОРИЗАЦИЯ
+        // 2. РђР’РўРћР РР—РђР¦РРЇ
         // ==========================================
         const LOGIN_CREDENTIALS = { username: 'admin', password: 'admin' };
 
@@ -1076,20 +1076,20 @@
             const label = document.getElementById('loginLabel');
             
             if (state.authenticated) {
-                status.textContent = '✅ Авторизован';
+                status.textContent = 'вњ… РђРІС‚РѕСЂРёР·РѕРІР°РЅ';
                 status.className = 'auth-status authorized';
                 btn.classList.add('logged-in');
-                icon.textContent = '🚪';
-                label.textContent = 'Выйти';
+                icon.textContent = 'рџљЄ';
+                label.textContent = 'Р’С‹Р№С‚Рё';
                 document.querySelector('.salary-section').style.display = 'block';
                 document.getElementById('dashboardSection').style.display = 'block';
                 startInactivityTimer();
             } else {
-                status.textContent = '🔒 Требуется вход';
+                status.textContent = 'рџ”’ РўСЂРµР±СѓРµС‚СЃСЏ РІС…РѕРґ';
                 status.className = 'auth-status unauthorized';
                 btn.classList.remove('logged-in');
-                icon.textContent = '🔐';
-                label.textContent = 'Войти';
+                icon.textContent = 'рџ”ђ';
+                label.textContent = 'Р’РѕР№С‚Рё';
                 document.querySelector('.salary-section').style.display = 'none';
                 document.getElementById('dashboardSection').style.display = 'none';
                 clearInactivityTimer();
@@ -1106,7 +1106,7 @@
                 loadSalaryDataForYear(appState.currentYear);
                 renderSalaryTable();
                 updateDashboard();
-                showToast('Добро пожаловать!', 'success');
+                showToast('Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ!', 'success');
             } else {
                 document.getElementById('loginError').style.display = 'block';
             }
@@ -1118,24 +1118,24 @@
             updateAuthUI();
             document.getElementById('salaryBody').innerHTML = '';
             document.getElementById('salaryFooter').innerHTML = '';
-            document.getElementById('dashTotal').textContent = '—';
-            document.getElementById('dashAvg').textContent = '—';
-            document.getElementById('dashMax').textContent = '—';
-            document.getElementById('dashMin').textContent = '—';
-            document.getElementById('dashCount').textContent = '—';
+            document.getElementById('dashTotal').textContent = 'вЂ”';
+            document.getElementById('dashAvg').textContent = 'вЂ”';
+            document.getElementById('dashMax').textContent = 'вЂ”';
+            document.getElementById('dashMin').textContent = 'вЂ”';
+            document.getElementById('dashCount').textContent = 'вЂ”';
             clearInactivityTimer();
             document.getElementById('chartSection').classList.remove('visible');
-            document.getElementById('showChartBtn').textContent = '📊 Диаграмма';
-            showToast('Вы вышли из системы', 'warning');
+            document.getElementById('showChartBtn').textContent = 'рџ“Љ Р”РёР°РіСЂР°РјРјР°';
+            showToast('Р’С‹ РІС‹С€Р»Рё РёР· СЃРёСЃС‚РµРјС‹', 'warning');
         }
 
-        // ===== ТАЙМЕР БЕЗДЕЙСТВИЯ =====
+        // ===== РўРђР™РњР•Р  Р‘Р•Р—Р”Р•Р™РЎРўР’РРЇ =====
         function resetInactivityTimer() {
             if (state.authenticated) {
                 clearTimeout(state.inactivityTimeout);
                 state.inactivityTimeout = setTimeout(() => {
                     logout();
-                    showToast('Сессия завершена из-за бездействия', 'warning');
+                    showToast('РЎРµСЃСЃРёСЏ Р·Р°РІРµСЂС€РµРЅР° РёР·-Р·Р° Р±РµР·РґРµР№СЃС‚РІРёСЏ', 'warning');
                 }, state.inactivityDelay);
             }
         }
@@ -1177,51 +1177,51 @@
         });
 
         // ==========================================
-        // 3. ПОГОДА
+        // 3. РџРћР“РћР”Рђ
         // ==========================================
         async function fetchWeather() {
             try {
                 const resp = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.75&longitude=37.62&current_weather=true&timezone=Europe/Moscow');
-                if (!resp.ok) throw new Error('Ошибка получения погоды');
+                if (!resp.ok) throw new Error('РћС€РёР±РєР° РїРѕР»СѓС‡РµРЅРёСЏ РїРѕРіРѕРґС‹');
                 const data = await resp.json();
                 const temp = data.current_weather.temperature;
                 const code = data.current_weather.weathercode;
                 
                 const weatherMap = {
-                    0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
-                    45: '🌫️', 48: '🌫️',
-                    51: '🌦️', 53: '🌦️', 55: '🌧️',
-                    56: '🌧️', 57: '🌧️',
-                    61: '🌦️', 63: '🌧️', 65: '🌧️',
-                    66: '🌧️', 67: '🌧️',
-                    71: '❄️', 73: '❄️', 75: '❄️',
-                    77: '🌨️',
-                    80: '🌦️', 81: '🌧️', 82: '🌧️',
-                    85: '🌨️', 86: '🌨️',
-                    95: '⛈️', 96: '⛈️', 99: '⛈️'
+                    0: 'вЂпёЏ', 1: 'рџЊ¤пёЏ', 2: 'в›…', 3: 'вЃпёЏ',
+                    45: 'рџЊ«пёЏ', 48: 'рџЊ«пёЏ',
+                    51: 'рџЊ¦пёЏ', 53: 'рџЊ¦пёЏ', 55: 'рџЊ§пёЏ',
+                    56: 'рџЊ§пёЏ', 57: 'рџЊ§пёЏ',
+                    61: 'рџЊ¦пёЏ', 63: 'рџЊ§пёЏ', 65: 'рџЊ§пёЏ',
+                    66: 'рџЊ§пёЏ', 67: 'рџЊ§пёЏ',
+                    71: 'вќ„пёЏ', 73: 'вќ„пёЏ', 75: 'вќ„пёЏ',
+                    77: 'рџЊЁпёЏ',
+                    80: 'рџЊ¦пёЏ', 81: 'рџЊ§пёЏ', 82: 'рџЊ§пёЏ',
+                    85: 'рџЊЁпёЏ', 86: 'рџЊЁпёЏ',
+                    95: 'в›€пёЏ', 96: 'в›€пёЏ', 99: 'в›€пёЏ'
                 };
-                const icon = weatherMap[code] || '🌡️';
+                const icon = weatherMap[code] || 'рџЊЎпёЏ';
                 
-                let descText = 'ясно';
-                if (code >= 51 && code <= 67) descText = 'дождь';
-                else if (code >= 71 && code <= 77) descText = 'снег';
-                else if (code >= 80 && code <= 82) descText = 'ливень';
-                else if (code >= 85 && code <= 86) descText = 'снегопад';
-                else if (code >= 95) descText = 'гроза';
-                else if (code === 3 || code === 2) descText = 'облачно';
-                else if (code === 1) descText = 'переменная облачность';
-                else if (code === 0) descText = 'ясно';
-                else if (code === 45 || code === 48) descText = 'туман';
+                let descText = 'СЏСЃРЅРѕ';
+                if (code >= 51 && code <= 67) descText = 'РґРѕР¶РґСЊ';
+                else if (code >= 71 && code <= 77) descText = 'СЃРЅРµРі';
+                else if (code >= 80 && code <= 82) descText = 'Р»РёРІРµРЅСЊ';
+                else if (code >= 85 && code <= 86) descText = 'СЃРЅРµРіРѕРїР°Рґ';
+                else if (code >= 95) descText = 'РіСЂРѕР·Р°';
+                else if (code === 3 || code === 2) descText = 'РѕР±Р»Р°С‡РЅРѕ';
+                else if (code === 1) descText = 'РїРµСЂРµРјРµРЅРЅР°СЏ РѕР±Р»Р°С‡РЅРѕСЃС‚СЊ';
+                else if (code === 0) descText = 'СЏСЃРЅРѕ';
+                else if (code === 45 || code === 48) descText = 'С‚СѓРјР°РЅ';
                 
                 document.getElementById('weatherIcon').textContent = icon;
-                document.getElementById('weatherTemp').textContent = Math.round(temp) + '°C';
+                document.getElementById('weatherTemp').textContent = Math.round(temp) + 'В°C';
                 document.getElementById('weatherDesc').textContent = descText;
                 document.getElementById('weatherDesc').style.color = '';
             } catch(e) {
-                console.warn('Ошибка получения погоды:', e);
-                document.getElementById('weatherIcon').textContent = '⚠️';
-                document.getElementById('weatherTemp').textContent = '--°C';
-                document.getElementById('weatherDesc').textContent = 'недоступно';
+                console.warn('РћС€РёР±РєР° РїРѕР»СѓС‡РµРЅРёСЏ РїРѕРіРѕРґС‹:', e);
+                document.getElementById('weatherIcon').textContent = 'вљ пёЏ';
+                document.getElementById('weatherTemp').textContent = '--В°C';
+                document.getElementById('weatherDesc').textContent = 'РЅРµРґРѕСЃС‚СѓРїРЅРѕ';
                 document.getElementById('weatherDesc').style.color = 'var(--change-negative)';
             }
         }
@@ -1229,7 +1229,7 @@
         setInterval(fetchWeather, 600000);
 
         // ==========================================
-        // 4. ДАШБОРД С ТУЛТИПОМ
+        // 4. Р”РђРЁР‘РћР Р” РЎ РўРЈР›РўРРџРћРњ
         // ==========================================
         function generateTipData() {
             if (!state.authenticated) return;
@@ -1246,18 +1246,18 @@
             let tipMax = totals.map((v, i) => {
                 if (v > 0) {
                     const highlight = (v === max && max > 0) ? ' highlight' : '';
-                    return `<div class="tip-item${highlight}"><span class="tip-label">${months[i]}</span><span class="tip-value">${formatMoney(v)} ₽</span></div>`;
+                    return `<div class="tip-item${highlight}"><span class="tip-label">${months[i]}</span><span class="tip-value">${formatMoney(v)} в‚Ѕ</span></div>`;
                 }
                 return '';
-            }).filter(s => s).join('') || 'Нет данных';
+            }).filter(s => s).join('') || 'РќРµС‚ РґР°РЅРЅС‹С…';
 
             let tipMin = totals.map((v, i) => {
                 if (v > 0) {
                     const highlight = (v === min && min > 0) ? ' highlight' : '';
-                    return `<div class="tip-item${highlight}"><span class="tip-label">${months[i]}</span><span class="tip-value">${formatMoney(v)} ₽</span></div>`;
+                    return `<div class="tip-item${highlight}"><span class="tip-label">${months[i]}</span><span class="tip-value">${formatMoney(v)} в‚Ѕ</span></div>`;
                 }
                 return '';
-            }).filter(s => s).join('') || 'Нет данных';
+            }).filter(s => s).join('') || 'РќРµС‚ РґР°РЅРЅС‹С…';
 
             return {
                 max: tipMax,
@@ -1306,12 +1306,12 @@
         }
 
         // ==========================================
-        // 5. ИСТОЧНИК ДАННЫХ – ТОЛЬКО ЦБ РФ
+        // 5. РРЎРўРћР§РќРРљ Р”РђРќРќР«РҐ вЂ“ РўРћР›Р¬РљРћ Р¦Р‘ Р Р¤
         // ==========================================
         async function fetchCBRates() {
             try {
                 const resp = await fetch('https://www.cbr-xml-daily.ru/daily_json.js');
-                if (!resp.ok) throw new Error('Ошибка получения курсов ЦБ');
+                if (!resp.ok) throw new Error('РћС€РёР±РєР° РїРѕР»СѓС‡РµРЅРёСЏ РєСѓСЂСЃРѕРІ Р¦Р‘');
                 const data = await resp.json();
                 const result = {};
                 const keys = ['usd', 'eur', 'cny'];
@@ -1325,7 +1325,7 @@
                 });
                 return result;
             } catch(e) {
-                console.error('Ошибка получения курсов ЦБ:', e);
+                console.error('РћС€РёР±РєР° РїРѕР»СѓС‡РµРЅРёСЏ РєСѓСЂСЃРѕРІ Р¦Р‘:', e);
                 return null;
             }
         }
@@ -1333,16 +1333,16 @@
         async function fetchAllRates() {
             const rates = await fetchCBRates();
             if (rates) {
-                document.getElementById('dataSource').textContent = 'Официальный API ЦБ РФ';
+                document.getElementById('dataSource').textContent = 'РћС„РёС†РёР°Р»СЊРЅС‹Р№ API Р¦Р‘ Р Р¤';
                 return rates;
             } else {
-                document.getElementById('dataSource').textContent = '⚠️ Ошибка загрузки курсов ЦБ';
+                document.getElementById('dataSource').textContent = 'вљ пёЏ РћС€РёР±РєР° Р·Р°РіСЂСѓР·РєРё РєСѓСЂСЃРѕРІ Р¦Р‘';
                 return { usd: null, eur: null, cny: null };
             }
         }
 
         // ==========================================
-        // 6. ИСТОРИЯ
+        // 6. РРЎРўРћР РРЇ
         // ==========================================
         function generateHistoryFromRates(rates, days = 365) {
             const history = {};
@@ -1366,10 +1366,10 @@
         }
 
         // ==========================================
-        // 7. ВИДЖЕТЫ
+        // 7. Р’РР”Р–Р•РўР«
         // ==========================================
         function formatNumber(num, decimals = 0) {
-            if (num === null || num === undefined || isNaN(num)) return '—';
+            if (num === null || num === undefined || isNaN(num)) return 'вЂ”';
             if (decimals === 0) return Math.round(num).toLocaleString('ru-RU');
             return num.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
         }
@@ -1387,8 +1387,8 @@
                 const value = rates[key];
                 const prev = prevRates[key];
                 const change = getChange(value, prev);
-                const sign = CONFIG.signs[key] || '₽';
-                const info = CONFIG.labels[key] || { icon: '📊', label: key.toUpperCase() };
+                const sign = CONFIG.signs[key] || 'в‚Ѕ';
+                const info = CONFIG.labels[key] || { icon: 'рџ“Љ', label: key.toUpperCase() };
                 const wrapper = document.createElement('div');
                 wrapper.className = 'tooltip-container';
                 wrapper.style.animationDelay = (idx * 0.05) + 's';
@@ -1396,18 +1396,18 @@
                 widget.className = 'widget-item';
                 widget.dataset.widget = key;
                 if (value === null || value === undefined) widget.classList.add('loading');
-                let valueHtml = '—';
+                let valueHtml = 'вЂ”';
                 if (value !== null && value !== undefined) {
                     valueHtml = value.toFixed(2);
                 }
                 let changeHtml = '';
                 if (change) {
                     const cls = change.diff >= 0 ? 'positive' : 'negative';
-                    const arrow = change.diff >= 0 ? '▲' : '▼';
+                    const arrow = change.diff >= 0 ? 'в–І' : 'в–ј';
                     changeHtml = `<span class="widget-change ${cls}"><span class="arrow">${arrow}</span> ${Math.abs(change.percent).toFixed(2)}%</span>`;
                     if (state.notificationsEnabled && Math.abs(change.percent) >= state.notificationThreshold) {
-                        const direction = change.diff >= 0 ? 'вырос' : 'упал';
-                        showToast(`⚠️ ${info.label} ${direction} на ${Math.abs(change.percent).toFixed(2)}% (${Math.abs(change.diff).toFixed(2)} ₽)`, 'warning');
+                        const direction = change.diff >= 0 ? 'РІС‹СЂРѕСЃ' : 'СѓРїР°Р»';
+                        showToast(`вљ пёЏ ${info.label} ${direction} РЅР° ${Math.abs(change.percent).toFixed(2)}% (${Math.abs(change.diff).toFixed(2)} в‚Ѕ)`, 'warning');
                     }
                 }
                 widget.innerHTML = `
@@ -1421,26 +1421,26 @@
                 tooltipBox.className = 'tooltip-box';
                 const historyData = state.history[key] || [];
                 const last7 = historyData.slice(-7);
-                const formatFn = (v) => v.toFixed(2) + ' ₽';
+                const formatFn = (v) => v.toFixed(2) + ' в‚Ѕ';
                 let listHtml = '';
-                if (last7.length === 0) listHtml = '<li style="color:var(--text-light);">нет данных</li>';
+                if (last7.length === 0) listHtml = '<li style="color:var(--text-light);">РЅРµС‚ РґР°РЅРЅС‹С…</li>';
                 else {
                     last7.forEach((item, idx) => {
                         let arrow = '',
                             cls = '';
                         if (idx < last7.length - 1) {
                             const diff = item.value - last7[idx + 1].value;
-                            if (diff > 0.001) { arrow = ' ↑';
-                                cls = 'change-positive'; } else if (diff < -0.001) { arrow = ' ↓';
+                            if (diff > 0.001) { arrow = ' в†‘';
+                                cls = 'change-positive'; } else if (diff < -0.001) { arrow = ' в†“';
                                 cls = 'change-negative'; }
                         }
                         listHtml += `<li><span>${item.date}</span><span class="${cls}">${formatFn(item.value)} ${arrow}</span></li>`;
                     });
                 }
                 tooltipBox.innerHTML = `
-                    <div class="tooltip-title">${info.label}/RUB <small>за 7 дней</small></div>
+                    <div class="tooltip-title">${info.label}/RUB <small>Р·Р° 7 РґРЅРµР№</small></div>
                     <ul class="tooltip-list">${listHtml}</ul>
-                    <div class="tooltip-footer">нажмите для графика</div>
+                    <div class="tooltip-footer">РЅР°Р¶РјРёС‚Рµ РґР»СЏ РіСЂР°С„РёРєР°</div>
                 `;
                 wrapper.appendChild(tooltipBox);
                 container.appendChild(wrapper);
@@ -1453,7 +1453,7 @@
         }
 
         // ==========================================
-        // 8. ОБНОВЛЕНИЕ ВСЕХ ДАННЫХ
+        // 8. РћР‘РќРћР’Р›Р•РќРР• Р’РЎР•РҐ Р”РђРќРќР«РҐ
         // ==========================================
         async function refreshAll() {
             const rates = await fetchAllRates();
@@ -1469,11 +1469,11 @@
         }
 
         // ==========================================
-        // 9. ГРАФИК КУРСОВ
+        // 9. Р“Р РђР¤РРљ РљРЈР РЎРћР’
         // ==========================================
         function getHistoryForChart(type, days) { return (state.history[type] || []).slice(-days); }
         function getFormatFn(type) {
-            return (v) => v.toFixed(2) + ' ₽';
+            return (v) => v.toFixed(2) + ' в‚Ѕ';
         }
         function getColor(type) { return CONFIG.colors[type] || '#4a7bc4'; }
 
@@ -1481,7 +1481,7 @@
             const type = state.currentWidget;
             const period = state.currentPeriod;
             const history = getHistoryForChart(type, period);
-            if (!history || history.length === 0) { document.getElementById('chartChange').textContent = 'изменение: нет данных'; return; }
+            if (!history || history.length === 0) { document.getElementById('chartChange').textContent = 'РёР·РјРµРЅРµРЅРёРµ: РЅРµС‚ РґР°РЅРЅС‹С…'; return; }
             const labels = history.map(i => i.date);
             const data = history.map(i => i.value);
             const color = getColor(type);
@@ -1496,11 +1496,11 @@
             const changePercentStr = changePercent >= 0 ? `+${changePercent.toFixed(2)}%` : `${changePercent.toFixed(2)}%`;
             const changeColor = change >= 0 ? 'var(--change-positive)' : 'var(--change-negative)';
             document.getElementById('chartChange').innerHTML =
-                `изменение: <span style="color:${changeColor};font-weight:600;">${changeStr} (${changePercentStr})</span>`;
+                `РёР·РјРµРЅРµРЅРёРµ: <span style="color:${changeColor};font-weight:600;">${changeStr} (${changePercentStr})</span>`;
 
-            const periodLabels = { 7: 'последние 7 дней', 30: 'последний месяц', 90: 'последние 3 месяца', 180: 'последние 6 месяцев',
-                365: 'последний год' };
-            document.getElementById('chartPeriod').textContent = periodLabels[period] || 'последний год';
+            const periodLabels = { 7: 'РїРѕСЃР»РµРґРЅРёРµ 7 РґРЅРµР№', 30: 'РїРѕСЃР»РµРґРЅРёР№ РјРµСЃСЏС†', 90: 'РїРѕСЃР»РµРґРЅРёРµ 3 РјРµСЃСЏС†Р°', 180: 'РїРѕСЃР»РµРґРЅРёРµ 6 РјРµСЃСЏС†РµРІ',
+                365: 'РїРѕСЃР»РµРґРЅРёР№ РіРѕРґ' };
+            document.getElementById('chartPeriod').textContent = periodLabels[period] || 'РїРѕСЃР»РµРґРЅРёР№ РіРѕРґ';
 
             const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim() || '#0b1a33';
             const gridColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim() || '#eef3fb';
@@ -1599,7 +1599,7 @@
         function openChart(type) {
             state.currentWidget = type;
             document.getElementById('modalTitle').innerHTML =
-                `${CONFIG.labels[type]?.icon || '📊'} ${CONFIG.labels[type]?.label || type.toUpperCase()} <small>динамика</small>`;
+                `${CONFIG.labels[type]?.icon || 'рџ“Љ'} ${CONFIG.labels[type]?.label || type.toUpperCase()} <small>РґРёРЅР°РјРёРєР°</small>`;
             document.querySelectorAll('.period-btn').forEach(b => {
                 b.classList.remove('active');
                 if (b.dataset.period == state.currentPeriod) b.classList.add('active');
@@ -1616,7 +1616,7 @@
         }
 
         // ==========================================
-        // 10. ЧАСЫ (с "рабочий день окончен")
+        // 10. Р§РђРЎР« (СЃ "СЂР°Р±РѕС‡РёР№ РґРµРЅСЊ РѕРєРѕРЅС‡РµРЅ")
         // ==========================================
         function updateClock() {
             const now = new Date();
@@ -1625,7 +1625,7 @@
             
             const hours = now.getHours();
             if (hours >= 18) {
-                document.getElementById('current-time').textContent = '🏁 Рабочий день окончен';
+                document.getElementById('current-time').textContent = 'рџЏЃ Р Р°Р±РѕС‡РёР№ РґРµРЅСЊ РѕРєРѕРЅС‡РµРЅ';
             } else {
                 document.getElementById('current-time').textContent = now.toLocaleTimeString('ru-RU', { hour: '2-digit',
                     minute: '2-digit' });
@@ -1635,12 +1635,12 @@
             endWork.setHours(18, 0, 0, 0);
             const diffMs = endWork.getTime() - now.getTime();
             let remainStr = '';
-            if (diffMs <= 0) remainStr = 'рабочий день завершён';
+            if (diffMs <= 0) remainStr = 'СЂР°Р±РѕС‡РёР№ РґРµРЅСЊ Р·Р°РІРµСЂС€С‘РЅ';
             else {
                 const diffMin = Math.floor(diffMs / 60000);
                 const hoursRem = Math.floor(diffMin / 60);
                 const minutesRem = diffMin % 60;
-                remainStr = `${hoursRem} ч ${minutesRem} мин`;
+                remainStr = `${hoursRem} С‡ ${minutesRem} РјРёРЅ`;
             }
             document.getElementById('work-remain').textContent = remainStr;
             document.getElementById('work-end-time').textContent = '18:00';
@@ -1648,7 +1648,7 @@
         }
 
         // ==========================================
-        // 11. ОБРАБОТЧИКИ СОБЫТИЙ
+        // 11. РћР‘Р РђР‘РћРўР§РРљР РЎРћР‘Р«РўРР™
         // ==========================================
         document.getElementById('themeToggle').addEventListener('click', toggleTheme);
         document.getElementById('modalClose').addEventListener('click', closeChart);
@@ -1673,7 +1673,7 @@
         });
 
         // ==========================================
-        // 12. ЭКСПОРТ / ИМПОРТ JSON
+        // 12. Р­РљРЎРџРћР Рў / РРњРџРћР Рў JSON
         // ==========================================
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
@@ -1685,7 +1685,7 @@
 
         function exportData() {
             if (!state.authenticated) {
-                showToast('Требуется авторизация', 'warning');
+                showToast('РўСЂРµР±СѓРµС‚СЃСЏ Р°РІС‚РѕСЂРёР·Р°С†РёСЏ', 'warning');
                 return;
             }
             const data = {
@@ -1724,12 +1724,12 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             const count = Object.keys(data.salary).length;
-            showToast(`✅ Экспортировано ${count} лет данных!`, 'success');
+            showToast(`вњ… Р­РєСЃРїРѕСЂС‚РёСЂРѕРІР°РЅРѕ ${count} Р»РµС‚ РґР°РЅРЅС‹С…!`, 'success');
         }
 
         function importData(file) {
             if (!state.authenticated) {
-                showToast('Требуется авторизация', 'warning');
+                showToast('РўСЂРµР±СѓРµС‚СЃСЏ Р°РІС‚РѕСЂРёР·Р°С†РёСЏ', 'warning');
                 return;
             }
             const reader = new FileReader();
@@ -1737,11 +1737,11 @@
                 try {
                     const data = JSON.parse(e.target.result);
                     if (!data.salary || typeof data.salary !== 'object') {
-                        throw new Error('Неверный формат файла');
+                        throw new Error('РќРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚ С„Р°Р№Р»Р°');
                     }
                     applyImportedData(data);
                 } catch(err) {
-                    showToast('❌ Ошибка импорта: ' + err.message, 'error');
+                    showToast('вќЊ РћС€РёР±РєР° РёРјРїРѕСЂС‚Р°: ' + err.message, 'error');
                 }
             };
             reader.readAsText(file);
@@ -1759,11 +1759,11 @@
         });
 
         // ==========================================
-        // 13. PDF ЭКСПОРТ
+        // 13. PDF Р­РљРЎРџРћР Рў
         // ==========================================
         document.getElementById('pdfBtn').addEventListener('click', function() {
             if (!state.authenticated) {
-                showToast('Требуется авторизация', 'warning');
+                showToast('РўСЂРµР±СѓРµС‚СЃСЏ Р°РІС‚РѕСЂРёР·Р°С†РёСЏ', 'warning');
                 return;
             }
             const element = document.getElementById('salaryTable');
@@ -1774,9 +1774,9 @@
             container.style.fontFamily = 'sans-serif';
             container.style.fontSize = '8px';
             container.innerHTML = `
-                <h1 style="font-size:16px; margin-bottom:8px;">Отчёт по зарплате</h1>
+                <h1 style="font-size:16px; margin-bottom:8px;">РћС‚С‡С‘С‚ РїРѕ Р·Р°СЂРїР»Р°С‚Рµ</h1>
                 <div style="margin-bottom:6px; font-size:10px;">
-                    <strong>Год:</strong> ${document.getElementById('yearSelect').value}
+                    <strong>Р“РѕРґ:</strong> ${document.getElementById('yearSelect').value}
                 </div>
                 <div style="margin-bottom:6px; text-align:center;">
                     <img src="${chartImage}" style="max-width:100%; height:auto; max-height:200px;" />
@@ -1785,7 +1785,7 @@
                     ${document.querySelector('#salaryTable').outerHTML}
                 </div>
                 <div style="margin-top:6px; font-size:8px; color:#666;">
-                    Сформировано: ${new Date().toLocaleString()}
+                    РЎС„РѕСЂРјРёСЂРѕРІР°РЅРѕ: ${new Date().toLocaleString()}
                 </div>
             `;
             document.body.appendChild(container);
@@ -1797,15 +1797,15 @@
                 jsPDF:         { unit: 'in', format: 'a4', orientation: 'landscape' }
             }).from(container).save().then(() => {
                 document.body.removeChild(container);
-                showToast('✅ PDF сформирован', 'success');
+                showToast('вњ… PDF СЃС„РѕСЂРјРёСЂРѕРІР°РЅ', 'success');
             }).catch(err => {
                 document.body.removeChild(container);
-                showToast('❌ Ошибка создания PDF: ' + err.message, 'error');
+                showToast('вќЊ РћС€РёР±РєР° СЃРѕР·РґР°РЅРёСЏ PDF: ' + err.message, 'error');
             });
         });
 
         // ==========================================
-        // 14. НАСТРОЙКИ
+        // 14. РќРђРЎРўР РћР™РљР
         // ==========================================
         const settingsModal = document.getElementById('settingsModal');
         const settingsClose = document.getElementById('settingsClose');
@@ -1834,7 +1834,7 @@
         });
 
         // ==========================================
-        // 15. БЭКАП
+        // 15. Р‘Р­РљРђРџ
         // ==========================================
         function createBackup() {
             const backup = {
@@ -1859,12 +1859,12 @@
             try {
                 const backup = localStorage.getItem('salaryBackup');
                 if (!backup) {
-                    showToast('❌ Бэкап не найден', 'error');
+                    showToast('вќЊ Р‘СЌРєР°Рї РЅРµ РЅР°Р№РґРµРЅ', 'error');
                     return;
                 }
                 const data = JSON.parse(backup);
                 if (!data.data || typeof data.data !== 'object') {
-                    showToast('❌ Неверный формат бэкапа', 'error');
+                    showToast('вќЊ РќРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚ Р±СЌРєР°РїР°', 'error');
                     return;
                 }
                 let count = 0;
@@ -1883,21 +1883,21 @@
                 loadSalaryDataForYear(currentYear);
                 renderSalaryTable();
                 updateDashboard();
-                showToast(`✅ Восстановлено ${count} лет из бэкапа!`, 'success');
+                showToast(`вњ… Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРѕ ${count} Р»РµС‚ РёР· Р±СЌРєР°РїР°!`, 'success');
             } catch(e) {
-                showToast('❌ Ошибка восстановления: ' + e.message, 'error');
+                showToast('вќЊ РћС€РёР±РєР° РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёСЏ: ' + e.message, 'error');
             }
         }
 
         document.getElementById('backupNowBtn').addEventListener('click', function() {
             createBackup();
-            showToast('💾 Бэкап создан', 'success');
+            showToast('рџ’ѕ Р‘СЌРєР°Рї СЃРѕР·РґР°РЅ', 'success');
         });
         document.getElementById('restoreBackupBtn').addEventListener('click', restoreBackup);
         setInterval(createBackup, 60000);
 
         // ==========================================
-        // 16. ИНТЕГРАЦИЯ С ЯНДЕКС ДИСК (ИСПРАВЛЕННАЯ загрузка через XMLHttpRequest)
+        // 16. РРќРўР•Р“Р РђР¦РРЇ РЎ РЇРќР”Р•РљРЎ Р”РРЎРљ (РРЎРџР РђР’Р›Р•РќРќРђРЇ Р·Р°РіСЂСѓР·РєР° С‡РµСЂРµР· XMLHttpRequest)
         // ==========================================
         function getYandexToken() {
             return localStorage.getItem('yandexToken') || null;
@@ -1941,7 +1941,7 @@
             document.getElementById('tokenError').style.display = 'none';
             setYandexToken(token);
             hideTokenModal();
-            showToast('✅ Токен сохранён', 'success');
+            showToast('вњ… РўРѕРєРµРЅ СЃРѕС…СЂР°РЅС‘РЅ', 'success');
             if (window._pendingCloudAction) {
                 const action = window._pendingCloudAction;
                 window._pendingCloudAction = null;
@@ -1955,13 +1955,13 @@
 
         document.getElementById('resetTokenBtn').addEventListener('click', function() {
             setYandexToken(null);
-            showToast('🔄 Токен сброшен', 'warning');
+            showToast('рџ”„ РўРѕРєРµРЅ СЃР±СЂРѕС€РµРЅ', 'warning');
         });
 
         document.getElementById('checkTokenBtn').addEventListener('click', async function() {
             const token = getYandexToken();
             if (!token) {
-                showToast('⚠️ Токен не задан', 'warning');
+                showToast('вљ пёЏ РўРѕРєРµРЅ РЅРµ Р·Р°РґР°РЅ', 'warning');
                 return;
             }
             try {
@@ -1969,19 +1969,19 @@
                     headers: { 'Authorization': `OAuth ${token}` }
                 });
                 if (resp.ok) {
-                    showToast('✅ Токен действует', 'success');
+                    showToast('вњ… РўРѕРєРµРЅ РґРµР№СЃС‚РІСѓРµС‚', 'success');
                 } else if (resp.status === 401 || resp.status === 403) {
-                    showToast('❌ Токен недействителен', 'error');
+                    showToast('вќЊ РўРѕРєРµРЅ РЅРµРґРµР№СЃС‚РІРёС‚РµР»РµРЅ', 'error');
                     setYandexToken(null);
                 } else {
-                    showToast('⚠️ Ошибка проверки: ' + resp.status, 'warning');
+                    showToast('вљ пёЏ РћС€РёР±РєР° РїСЂРѕРІРµСЂРєРё: ' + resp.status, 'warning');
                 }
             } catch(e) {
-                showToast('❌ Ошибка сети', 'error');
+                showToast('вќЊ РћС€РёР±РєР° СЃРµС‚Рё', 'error');
             }
         });
 
-        // Сохранение – работает
+        // РЎРѕС…СЂР°РЅРµРЅРёРµ вЂ“ СЂР°Р±РѕС‚Р°РµС‚
         async function saveToYandexDisk(data) {
             const token = getYandexToken();
             if (!token) {
@@ -1999,13 +1999,13 @@
                 );
                 if (!uploadUrlResponse.ok) {
                     if (uploadUrlResponse.status === 401 || uploadUrlResponse.status === 403) {
-                        showToast('❌ Токен недействителен или истёк. Введите новый.', 'error');
+                        showToast('вќЊ РўРѕРєРµРЅ РЅРµРґРµР№СЃС‚РІРёС‚РµР»РµРЅ РёР»Рё РёСЃС‚С‘Рє. Р’РІРµРґРёС‚Рµ РЅРѕРІС‹Р№.', 'error');
                         setYandexToken(null);
                         showTokenModal();
                         return;
                     }
                     const errorText = await uploadUrlResponse.text();
-                    throw new Error(`Ошибка получения URL: ${errorText}`);
+                    throw new Error(`РћС€РёР±РєР° РїРѕР»СѓС‡РµРЅРёСЏ URL: ${errorText}`);
                 }
                 const uploadUrlData = await uploadUrlResponse.json();
                 const jsonString = JSON.stringify(data);
@@ -2015,32 +2015,32 @@
                     body: jsonString
                 });
                 if (!uploadResponse.ok) {
-                    throw new Error(`Ошибка загрузки: ${uploadResponse.statusText}`);
+                    throw new Error(`РћС€РёР±РєР° Р·Р°РіСЂСѓР·РєРё: ${uploadResponse.statusText}`);
                 }
-                showToast('✅ Данные сохранены в Яндекс Диск!', 'success');
+                showToast('вњ… Р”Р°РЅРЅС‹Рµ СЃРѕС…СЂР°РЅРµРЅС‹ РІ РЇРЅРґРµРєСЃ Р”РёСЃРє!', 'success');
             } catch (error) {
-                console.error('Ошибка сохранения:', error);
+                console.error('РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ:', error);
                 if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-                    showToast('❌ Ошибка сети. Проверьте интернет-соединение.', 'error');
+                    showToast('вќЊ РћС€РёР±РєР° СЃРµС‚Рё. РџСЂРѕРІРµСЂСЊС‚Рµ РёРЅС‚РµСЂРЅРµС‚-СЃРѕРµРґРёРЅРµРЅРёРµ.', 'error');
                 } else {
-                    showToast('❌ Ошибка сохранения: ' + error.message, 'error');
+                    showToast('вќЊ РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ: ' + error.message, 'error');
                 }
             }
         }
 
-        // ЗАГРУЗКА – используем XMLHttpRequest с логами
+        // Р—РђР“Р РЈР—РљРђ вЂ“ РёСЃРїРѕР»СЊР·СѓРµРј XMLHttpRequest СЃ Р»РѕРіР°РјРё
         async function loadFromYandexDisk() {
-            console.log('[Яндекс] loadFromYandexDisk вызвана');
+            console.log('[РЇРЅРґРµРєСЃ] loadFromYandexDisk РІС‹Р·РІР°РЅР°');
             const token = getYandexToken();
             if (!token) {
-                console.log('[Яндекс] Токен отсутствует, показываем модалку');
+                console.log('[РЇРЅРґРµРєСЃ] РўРѕРєРµРЅ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚, РїРѕРєР°Р·С‹РІР°РµРј РјРѕРґР°Р»РєСѓ');
                 window._pendingCloudAction = 'load';
                 showTokenModal();
                 return null;
             }
-            console.log('[Яндекс] Токен есть, начинаем загрузку');
+            console.log('[РЇРЅРґРµРєСЃ] РўРѕРєРµРЅ РµСЃС‚СЊ, РЅР°С‡РёРЅР°РµРј Р·Р°РіСЂСѓР·РєСѓ');
             try {
-                console.log('[Яндекс] Запрашиваем ссылку на скачивание...');
+                console.log('[РЇРЅРґРµРєСЃ] Р—Р°РїСЂР°С€РёРІР°РµРј СЃСЃС‹Р»РєСѓ РЅР° СЃРєР°С‡РёРІР°РЅРёРµ...');
                 const downloadUrlResponse = await fetch(
                     `https://cloud-api.yandex.net/v1/disk/resources/download?path=app:/salary_data.json`,
                     {
@@ -2048,20 +2048,20 @@
                         headers: { 'Authorization': `OAuth ${token}` }
                     }
                 );
-                console.log('[Яндекс] Ответ на получение ссылки:', downloadUrlResponse.status);
+                console.log('[РЇРЅРґРµРєСЃ] РћС‚РІРµС‚ РЅР° РїРѕР»СѓС‡РµРЅРёРµ СЃСЃС‹Р»РєРё:', downloadUrlResponse.status);
                 if (!downloadUrlResponse.ok) {
                     if (downloadUrlResponse.status === 404) {
-                        showToast('ℹ️ Файл на Диске не найден. Сначала сохраните данные.', 'warning');
+                        showToast('в„№пёЏ Р¤Р°Р№Р» РЅР° Р”РёСЃРєРµ РЅРµ РЅР°Р№РґРµРЅ. РЎРЅР°С‡Р°Р»Р° СЃРѕС…СЂР°РЅРёС‚Рµ РґР°РЅРЅС‹Рµ.', 'warning');
                         return null;
                     }
                     if (downloadUrlResponse.status === 401 || downloadUrlResponse.status === 403) {
-                        showToast('❌ Токен недействителен или истёк. Введите новый.', 'error');
+                        showToast('вќЊ РўРѕРєРµРЅ РЅРµРґРµР№СЃС‚РІРёС‚РµР»РµРЅ РёР»Рё РёСЃС‚С‘Рє. Р’РІРµРґРёС‚Рµ РЅРѕРІС‹Р№.', 'error');
                         setYandexToken(null);
                         showTokenModal();
                         return null;
                     }
                     const errorText = await downloadUrlResponse.text();
-                    throw new Error(`Ошибка получения URL: ${errorText}`);
+                    throw new Error(`РћС€РёР±РєР° РїРѕР»СѓС‡РµРЅРёСЏ URL: ${errorText}`);
                 }
                 const downloadUrlData = await downloadUrlResponse.json();
                 let downloadUrl = downloadUrlData.href;
@@ -2070,47 +2070,47 @@
                     downloadUrl += separator + 'access_token=' + token;
                 }
                 downloadUrl += '&_t=' + Date.now();
-                console.log('[Яндекс] Ссылка на скачивание:', downloadUrl);
+                console.log('[РЇРЅРґРµРєСЃ] РЎСЃС‹Р»РєР° РЅР° СЃРєР°С‡РёРІР°РЅРёРµ:', downloadUrl);
 
-                // Используем XMLHttpRequest
+                // РСЃРїРѕР»СЊР·СѓРµРј XMLHttpRequest
                 return new Promise((resolve, reject) => {
                     const xhr = new XMLHttpRequest();
                     xhr.open('GET', downloadUrl, true);
                     xhr.responseType = 'json';
                     xhr.timeout = 30000;
                     xhr.onload = function() {
-                        console.log('[Яндекс] XHR статус:', xhr.status);
+                        console.log('[РЇРЅРґРµРєСЃ] XHR СЃС‚Р°С‚СѓСЃ:', xhr.status);
                         if (xhr.status === 200) {
                             try {
                                 const data = xhr.response;
-                                showToast('✅ Данные загружены из Яндекс Диска!', 'success');
+                                showToast('вњ… Р”Р°РЅРЅС‹Рµ Р·Р°РіСЂСѓР¶РµРЅС‹ РёР· РЇРЅРґРµРєСЃ Р”РёСЃРєР°!', 'success');
                                 resolve(data);
                             } catch (e) {
-                                reject(new Error('Ошибка парсинга JSON: ' + e.message));
+                                reject(new Error('РћС€РёР±РєР° РїР°СЂСЃРёРЅРіР° JSON: ' + e.message));
                             }
                         } else {
                             if (xhr.status === 401 || xhr.status === 403) {
-                                showToast('❌ Токен недействителен или истёк. Введите новый.', 'error');
+                                showToast('вќЊ РўРѕРєРµРЅ РЅРµРґРµР№СЃС‚РІРёС‚РµР»РµРЅ РёР»Рё РёСЃС‚С‘Рє. Р’РІРµРґРёС‚Рµ РЅРѕРІС‹Р№.', 'error');
                                 setYandexToken(null);
                                 showTokenModal();
-                                reject(new Error('Токен недействителен'));
+                                reject(new Error('РўРѕРєРµРЅ РЅРµРґРµР№СЃС‚РІРёС‚РµР»РµРЅ'));
                             } else {
-                                reject(new Error('Ошибка загрузки: ' + xhr.status + ' ' + xhr.statusText));
+                                reject(new Error('РћС€РёР±РєР° Р·Р°РіСЂСѓР·РєРё: ' + xhr.status + ' ' + xhr.statusText));
                             }
                         }
                     };
                     xhr.onerror = function() {
-                        console.error('[Яндекс] XHR onerror');
-                        reject(new Error('Ошибка сети при загрузке файла'));
+                        console.error('[РЇРЅРґРµРєСЃ] XHR onerror');
+                        reject(new Error('РћС€РёР±РєР° СЃРµС‚Рё РїСЂРё Р·Р°РіСЂСѓР·РєРµ С„Р°Р№Р»Р°'));
                     };
                     xhr.ontimeout = function() {
-                        reject(new Error('Таймаут загрузки файла'));
+                        reject(new Error('РўР°Р№РјР°СѓС‚ Р·Р°РіСЂСѓР·РєРё С„Р°Р№Р»Р°'));
                     };
                     xhr.send();
                 });
             } catch (error) {
-                console.error('[Яндекс] Ошибка в loadFromYandexDisk:', error);
-                showToast('❌ Ошибка загрузки: ' + error.message, 'error');
+                console.error('[РЇРЅРґРµРєСЃ] РћС€РёР±РєР° РІ loadFromYandexDisk:', error);
+                showToast('вќЊ РћС€РёР±РєР° Р·Р°РіСЂСѓР·РєРё: ' + error.message, 'error');
                 return null;
             }
         }
@@ -2143,7 +2143,7 @@
 
         function applyImportedData(data) {
             if (!data.salary || typeof data.salary !== 'object') {
-                showToast('❌ Неверный формат данных', 'error');
+                showToast('вќЊ РќРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚ РґР°РЅРЅС‹С…', 'error');
                 return;
             }
             let count = 0;
@@ -2193,14 +2193,14 @@
             loadSalaryDataForYear(appState.currentYear);
             renderSalaryTable();
             updateDashboard();
-            showToast(`✅ Импортировано ${count} лет данных!`, 'success');
+            showToast(`вњ… РРјРїРѕСЂС‚РёСЂРѕРІР°РЅРѕ ${count} Р»РµС‚ РґР°РЅРЅС‹С…!`, 'success');
         }
 
-        // Обработчики кнопок с логированием
+        // РћР±СЂР°Р±РѕС‚С‡РёРєРё РєРЅРѕРїРѕРє СЃ Р»РѕРіРёСЂРѕРІР°РЅРёРµРј
         document.getElementById('saveCloudBtn').addEventListener('click', async function() {
-            console.log('[Кнопка] Сохранить в Яндексе нажата');
+            console.log('[РљРЅРѕРїРєР°] РЎРѕС…СЂР°РЅРёС‚СЊ РІ РЇРЅРґРµРєСЃРµ РЅР°Р¶Р°С‚Р°');
             if (!state.authenticated) {
-                showToast('Требуется авторизация', 'warning');
+                showToast('РўСЂРµР±СѓРµС‚СЃСЏ Р°РІС‚РѕСЂРёР·Р°С†РёСЏ', 'warning');
                 return;
             }
             const data = getCurrentData();
@@ -2208,9 +2208,9 @@
         });
 
         document.getElementById('loadCloudBtn').addEventListener('click', async function() {
-            console.log('[Кнопка] Загрузить из Яндекса нажата');
+            console.log('[РљРЅРѕРїРєР°] Р—Р°РіСЂСѓР·РёС‚СЊ РёР· РЇРЅРґРµРєСЃР° РЅР°Р¶Р°С‚Р°');
             if (!state.authenticated) {
-                showToast('Требуется авторизация', 'warning');
+                showToast('РўСЂРµР±СѓРµС‚СЃСЏ Р°РІС‚РѕСЂРёР·Р°С†РёСЏ', 'warning');
                 return;
             }
             const data = await loadFromYandexDisk();
@@ -2220,7 +2220,7 @@
         });
 
         // ==========================================
-        // 17. ДОБАВЛЕНИЕ НОВОГО ГОДА
+        // 17. Р”РћР‘РђР’Р›Р•РќРР• РќРћР’РћР“Рћ Р“РћР”Рђ
         // ==========================================
         function refreshYearSelector() {
             const select = document.getElementById('yearSelect');
@@ -2270,11 +2270,11 @@
         function addNewYear(year) {
             const key = 'salaryData_' + year;
             if (localStorage.getItem(key)) {
-                showToast('⚠️ Год уже существует', 'warning');
+                showToast('вљ пёЏ Р“РѕРґ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', 'warning');
                 return false;
             }
             if (year < 2010 || year > 2100) {
-                showToast('❌ Год должен быть от 2010 до 2100', 'error');
+                showToast('вќЊ Р“РѕРґ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РѕС‚ 2010 РґРѕ 2100', 'error');
                 return false;
             }
             const data = MONTHS.map((month) => ({
@@ -2293,7 +2293,7 @@
             appState.currentYear = year;
             renderSalaryTable();
             updateDashboard();
-            showToast(`✅ Год ${year} добавлен`, 'success');
+            showToast(`вњ… Р“РѕРґ ${year} РґРѕР±Р°РІР»РµРЅ`, 'success');
             return true;
         }
 
@@ -2322,17 +2322,17 @@
             const year = parseInt(document.getElementById('newYearInput').value);
             if (isNaN(year)) {
                 document.getElementById('addYearError').style.display = 'block';
-                document.getElementById('addYearError').textContent = 'Введите число';
+                document.getElementById('addYearError').textContent = 'Р’РІРµРґРёС‚Рµ С‡РёСЃР»Рѕ';
                 return;
             }
             if (year < 2010 || year > 2100) {
                 document.getElementById('addYearError').style.display = 'block';
-                document.getElementById('addYearError').textContent = 'Год должен быть от 2010 до 2100';
+                document.getElementById('addYearError').textContent = 'Р“РѕРґ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РѕС‚ 2010 РґРѕ 2100';
                 return;
             }
             if (localStorage.getItem('salaryData_' + year)) {
                 document.getElementById('addYearError').style.display = 'block';
-                document.getElementById('addYearError').textContent = 'Год уже существует';
+                document.getElementById('addYearError').textContent = 'Р“РѕРґ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚';
                 return;
             }
             document.getElementById('addYearError').style.display = 'none';
@@ -2341,11 +2341,11 @@
         });
 
         // ==========================================
-        // 18. СТАТИСТИКА ЗАРПЛАТЫ
+        // 18. РЎРўРђРўРРЎРўРРљРђ Р—РђР РџР›РђРўР«
         // ==========================================
 
-        const MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь',
-            'Декабрь'
+        const MONTHS = ['РЇРЅРІР°СЂСЊ', 'Р¤РµРІСЂР°Р»СЊ', 'РњР°СЂС‚', 'РђРїСЂРµР»СЊ', 'РњР°Р№', 'РСЋРЅСЊ', 'РСЋР»СЊ', 'РђРІРіСѓСЃС‚', 'РЎРµРЅС‚СЏР±СЂСЊ', 'РћРєС‚СЏР±СЂСЊ', 'РќРѕСЏР±СЂСЊ',
+            'Р”РµРєР°Р±СЂСЊ'
         ];
         const SALARY_STORAGE_PREFIX = 'salaryData_';
 
@@ -2355,7 +2355,7 @@
 
         function formatMoney(value, decimals = 2) {
             const num = parseFloat(value);
-            if (isNaN(num) || num === 0) return '—';
+            if (isNaN(num) || num === 0) return 'вЂ”';
             const parts = num.toFixed(decimals).split('.');
             const intPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
             if (decimals === 0) return intPart;
@@ -2363,7 +2363,7 @@
         }
 
         function parseMoneyInput(value) {
-            if (!value || value.trim() === '—' || value.trim() === '') return 0;
+            if (!value || value.trim() === 'вЂ”' || value.trim() === '') return 0;
             const cleaned = value.replace(/\s/g, '').replace(',', '.');
             const num = parseFloat(cleaned);
             return isNaN(num) ? 0 : num;
@@ -2436,7 +2436,7 @@
             if (isNumeric) {
                 const num = parseFloat(value);
                 if (isNaN(num) || num === 0) {
-                    displayValue = '—';
+                    displayValue = 'вЂ”';
                 } else {
                     displayValue = formatMoney(num, decimals);
                 }
@@ -2447,7 +2447,7 @@
 
             td.addEventListener('focus', function() {
                 const text = this.textContent;
-                if (text === '—' || text === '') {
+                if (text === 'вЂ”' || text === '') {
                     this.textContent = '';
                 } else if (isNumeric) {
                     const raw = parseMoneyInput(text);
@@ -2479,7 +2479,7 @@
         }
 
         // ==========================================
-        // ОТРИСОВКА ТАБЛИЦЫ С РАЗБИВКОЙ НА КВАРТАЛЫ
+        // РћРўР РРЎРћР’РљРђ РўРђР‘Р›РР¦Р« РЎ Р РђР—Р‘РР’РљРћР™ РќРђ РљР’РђР РўРђР›Р«
         // ==========================================
         function renderSalaryTable() {
             if (!state.authenticated) return;
@@ -2490,10 +2490,10 @@
             function createQuarterRow(quarterIndex, startIndex) {
                 const tr = document.createElement('tr');
                 tr.className = 'quarter-row';
-                const quarterNames = ['1-й квартал', '2-й квартал', '3-й квартал', '4-й квартал'];
+                const quarterNames = ['1-Р№ РєРІР°СЂС‚Р°Р»', '2-Р№ РєРІР°СЂС‚Р°Р»', '3-Р№ РєРІР°СЂС‚Р°Р»', '4-Р№ РєРІР°СЂС‚Р°Р»'];
                 
                 const tdLabel = document.createElement('td');
-                tdLabel.textContent = '📊 ' + quarterNames[quarterIndex];
+                tdLabel.textContent = 'рџ“Љ ' + quarterNames[quarterIndex];
                 tdLabel.className = 'quarter-label';
                 tr.appendChild(tdLabel);
 
@@ -2519,13 +2519,13 @@
 
                 fields.forEach(f => {
                     const td = document.createElement('td');
-                    td.textContent = sums[f] === 0 ? '—' : formatMoney(sums[f], 2);
+                    td.textContent = sums[f] === 0 ? 'вЂ”' : formatMoney(sums[f], 2);
                     td.className = 'total-cell';
                     tr.appendChild(td);
                 });
 
                 const tdTotal = document.createElement('td');
-                tdTotal.textContent = totalSum === 0 ? '—' : formatMoney(totalSum, 2);
+                tdTotal.textContent = totalSum === 0 ? 'вЂ”' : formatMoney(totalSum, 2);
                 tdTotal.className = 'total-cell';
                 tdTotal.style.fontWeight = '600';
                 tr.appendChild(tdTotal);
@@ -2553,7 +2553,7 @@
 
                 const tdTotal = document.createElement('td');
                 tdTotal.className = 'money-cell';
-                tdTotal.textContent = total === 0 ? '—' : formatMoney(total, 2);
+                tdTotal.textContent = total === 0 ? 'вЂ”' : formatMoney(total, 2);
                 tdTotal.style.fontWeight = '600';
                 tdTotal.style.color = 'var(--text-primary)';
 
@@ -2581,7 +2581,7 @@
             trFoot.className = 'total-row';
 
             const tdLabel = document.createElement('td');
-            tdLabel.textContent = 'Итого за год:';
+            tdLabel.textContent = 'РС‚РѕРіРѕ Р·Р° РіРѕРґ:';
             tdLabel.style.textAlign = 'right';
             trFoot.appendChild(tdLabel);
 
@@ -2590,7 +2590,7 @@
             trFoot.appendChild(tdOrgTotal);
 
             const tdRateTotal = document.createElement('td');
-            tdRateTotal.textContent = '—';
+            tdRateTotal.textContent = 'вЂ”';
             tdRateTotal.className = 'dash';
             trFoot.appendChild(tdRateTotal);
 
@@ -2605,34 +2605,34 @@
             });
 
             const tdSalaryTotal = document.createElement('td');
-            tdSalaryTotal.textContent = sums.salary === 0 ? '—' : formatMoney(sums.salary, 2);
+            tdSalaryTotal.textContent = sums.salary === 0 ? 'вЂ”' : formatMoney(sums.salary, 2);
             tdSalaryTotal.className = 'total-cell';
             trFoot.appendChild(tdSalaryTotal);
 
             const tdAdvanceTotal = document.createElement('td');
-            tdAdvanceTotal.textContent = sums.advance === 0 ? '—' : formatMoney(sums.advance, 2);
+            tdAdvanceTotal.textContent = sums.advance === 0 ? 'вЂ”' : formatMoney(sums.advance, 2);
             tdAdvanceTotal.className = 'total-cell';
             trFoot.appendChild(tdAdvanceTotal);
 
             const tdBaseTotal = document.createElement('td');
-            tdBaseTotal.textContent = sums.baseSalary === 0 ? '—' : formatMoney(sums.baseSalary, 2);
+            tdBaseTotal.textContent = sums.baseSalary === 0 ? 'вЂ”' : formatMoney(sums.baseSalary, 2);
             tdBaseTotal.className = 'total-cell';
             trFoot.appendChild(tdBaseTotal);
 
             const tdBonusTotal = document.createElement('td');
-            tdBonusTotal.textContent = sums.bonus === 0 ? '—' : formatMoney(sums.bonus, 2);
+            tdBonusTotal.textContent = sums.bonus === 0 ? 'вЂ”' : formatMoney(sums.bonus, 2);
             tdBonusTotal.className = 'total-cell';
             trFoot.appendChild(tdBonusTotal);
 
             const tdVacationTotal = document.createElement('td');
-            tdVacationTotal.textContent = sums.vacation === 0 ? '—' : formatMoney(sums.vacation, 2);
+            tdVacationTotal.textContent = sums.vacation === 0 ? 'вЂ”' : formatMoney(sums.vacation, 2);
             tdVacationTotal.className = 'total-cell';
             trFoot.appendChild(tdVacationTotal);
 
             let totalSum = 0;
             data.forEach(row => totalSum += calcRowTotal(row));
             const tdTotalSum = document.createElement('td');
-            tdTotalSum.textContent = totalSum === 0 ? '—' : formatMoney(totalSum, 2);
+            tdTotalSum.textContent = totalSum === 0 ? 'вЂ”' : formatMoney(totalSum, 2);
             tdTotalSum.style.fontWeight = '600';
             tdTotalSum.style.color = 'var(--text-primary)';
             trFoot.appendChild(tdTotalSum);
@@ -2644,7 +2644,7 @@
         }
 
         // ==========================================
-        // 19. ДАШБОРД
+        // 19. Р”РђРЁР‘РћР Р”
         // ==========================================
         function updateDashboard() {
             if (!state.authenticated) return;
@@ -2657,15 +2657,15 @@
             const min = valid.length > 0 ? Math.min(...valid) : 0;
             const count = valid.length;
 
-            document.getElementById('dashTotal').textContent = formatMoney(totalSum, 2) + ' ₽';
-            document.getElementById('dashAvg').textContent = formatMoney(avg, 2) + ' ₽';
-            document.getElementById('dashMax').textContent = formatMoney(max, 2) + ' ₽';
-            document.getElementById('dashMin').textContent = formatMoney(min, 2) + ' ₽';
+            document.getElementById('dashTotal').textContent = formatMoney(totalSum, 2) + ' в‚Ѕ';
+            document.getElementById('dashAvg').textContent = formatMoney(avg, 2) + ' в‚Ѕ';
+            document.getElementById('dashMax').textContent = formatMoney(max, 2) + ' в‚Ѕ';
+            document.getElementById('dashMin').textContent = formatMoney(min, 2) + ' в‚Ѕ';
             document.getElementById('dashCount').textContent = count;
         }
 
         // ==========================================
-        // 20. ДИАГРАММА ЗАРПЛАТЫ (без дата-лейблов)
+        // 20. Р”РРђР“Р РђРњРњРђ Р—РђР РџР›РђРўР« (Р±РµР· РґР°С‚Р°-Р»РµР№Р±Р»РѕРІ)
         // ==========================================
         let salaryChartInstance = null;
 
@@ -2743,18 +2743,18 @@
             });
 
             if (allData.length === 0) {
-                document.getElementById('avgSalary').textContent = '—';
-                document.getElementById('maxSalary').textContent = '—';
-                document.getElementById('minSalary').textContent = '—';
-                document.getElementById('totalMonths').textContent = '—';
-                document.getElementById('periodLabel').textContent = 'Период: —';
+                document.getElementById('avgSalary').textContent = 'вЂ”';
+                document.getElementById('maxSalary').textContent = 'вЂ”';
+                document.getElementById('minSalary').textContent = 'вЂ”';
+                document.getElementById('totalMonths').textContent = 'вЂ”';
+                document.getElementById('periodLabel').textContent = 'РџРµСЂРёРѕРґ: вЂ”';
                 document.getElementById('forecastLabel').style.display = 'none';
                 return;
             }
 
-            const startYearDisplay = years.length > 0 ? years[0] : '—';
-            const endYearDisplay = years.length > 0 ? years[years.length - 1] : '—';
-            document.getElementById('periodLabel').textContent = `Период: ${startYearDisplay} – ${endYearDisplay} (${allData.length} месяцев)`;
+            const startYearDisplay = years.length > 0 ? years[0] : 'вЂ”';
+            const endYearDisplay = years.length > 0 ? years[years.length - 1] : 'вЂ”';
+            document.getElementById('periodLabel').textContent = `РџРµСЂРёРѕРґ: ${startYearDisplay} вЂ“ ${endYearDisplay} (${allData.length} РјРµСЃСЏС†РµРІ)`;
 
             let forecast = null;
             if (allData.length > 2) {
@@ -2767,7 +2767,7 @@
             }
             if (forecast !== null && forecast > 0) {
                 document.getElementById('forecastLabel').style.display = 'inline-flex';
-                document.getElementById('forecastValue').textContent = formatMoney(forecast, 2) + ' ₽';
+                document.getElementById('forecastValue').textContent = formatMoney(forecast, 2) + ' в‚Ѕ';
             } else {
                 document.getElementById('forecastLabel').style.display = 'none';
             }
@@ -2783,7 +2783,7 @@
             const barColors = allData.map(v => v >= avgValue ? positiveColor : negativeColor);
 
             const datasets = [{
-                label: 'Итого (₽)',
+                label: 'РС‚РѕРіРѕ (в‚Ѕ)',
                 data: allData,
                 backgroundColor: barColors.map(c => c + '80'),
                 borderColor: barColors,
@@ -2795,7 +2795,7 @@
             if (showMovingAvg) {
                 const avgData = movingAverage(allData, 3);
                 datasets.push({
-                    label: 'Скользящее среднее (3 мес)',
+                    label: 'РЎРєРѕР»СЊР·СЏС‰РµРµ СЃСЂРµРґРЅРµРµ (3 РјРµСЃ)',
                     data: avgData,
                     borderColor: '#ff9f40',
                     backgroundColor: 'rgba(255, 159, 64, 0.1)',
@@ -2812,7 +2812,7 @@
             compareYears.forEach((year, idx) => {
                 if (year != currentYear && yearDataMap[year]) {
                     const yearData = yearDataMap[year];
-                    const label = year + ' (сравнение)';
+                    const label = year + ' (СЃСЂР°РІРЅРµРЅРёРµ)';
                     const borderColor = colors[idx % colors.length];
                     datasets.push({
                         label: label,
@@ -2830,9 +2830,9 @@
 
             if (forecast !== null && forecast > 0) {
                 const forecastData = allData.concat([forecast]);
-                const forecastLabels = allLabels.concat(['Прогноз']);
+                const forecastLabels = allLabels.concat(['РџСЂРѕРіРЅРѕР·']);
                 datasets.push({
-                    label: 'Прогноз',
+                    label: 'РџСЂРѕРіРЅРѕР·',
                     data: forecastData,
                     borderColor: '#ff6384',
                     backgroundColor: 'rgba(255, 99, 132, 0.1)',
@@ -2844,7 +2844,7 @@
                     fill: false,
                     type: 'line',
                 });
-                allLabels = allLabels.concat(['Прогноз']);
+                allLabels = allLabels.concat(['РџСЂРѕРіРЅРѕР·']);
             }
 
             const chartType = state.salaryChartType === 'line' ? 'line' : 'bar';
@@ -2860,7 +2860,7 @@
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return context.dataset.label + ': ' + formatMoney(context.parsed.y, 2) + ' ₽';
+                                return context.dataset.label + ': ' + formatMoney(context.parsed.y, 2) + ' в‚Ѕ';
                             }
                         }
                     }
@@ -2913,20 +2913,20 @@
                 const avg = validData.reduce((a, b) => a + b, 0) / validData.length;
                 const max = Math.max(...validData);
                 const min = Math.min(...validData);
-                document.getElementById('avgSalary').textContent = formatMoney(avg, 2) + ' ₽';
-                document.getElementById('maxSalary').textContent = formatMoney(max, 2) + ' ₽';
-                document.getElementById('minSalary').textContent = formatMoney(min, 2) + ' ₽';
+                document.getElementById('avgSalary').textContent = formatMoney(avg, 2) + ' в‚Ѕ';
+                document.getElementById('maxSalary').textContent = formatMoney(max, 2) + ' в‚Ѕ';
+                document.getElementById('minSalary').textContent = formatMoney(min, 2) + ' в‚Ѕ';
                 document.getElementById('totalMonths').textContent = validData.length;
             } else {
-                document.getElementById('avgSalary').textContent = '—';
-                document.getElementById('maxSalary').textContent = '—';
-                document.getElementById('minSalary').textContent = '—';
-                document.getElementById('totalMonths').textContent = '—';
+                document.getElementById('avgSalary').textContent = 'вЂ”';
+                document.getElementById('maxSalary').textContent = 'вЂ”';
+                document.getElementById('minSalary').textContent = 'вЂ”';
+                document.getElementById('totalMonths').textContent = 'вЂ”';
             }
         }
 
         // ==========================================
-        // 21. КНОПКА ПОКАЗА ДИАГРАММЫ
+        // 21. РљРќРћРџРљРђ РџРћРљРђР—Рђ Р”РРђР“Р РђРњРњР«
         // ==========================================
         document.getElementById('showChartBtn').addEventListener('click', function() {
             const chartSection = document.getElementById('chartSection');
@@ -2942,14 +2942,14 @@
                         chartSection.style.background = 'transparent';
                     }, 1500);
                 }, 100);
-                this.textContent = '📊 Скрыть диаграмму';
+                this.textContent = 'рџ“Љ РЎРєСЂС‹С‚СЊ РґРёР°РіСЂР°РјРјСѓ';
             } else {
-                this.textContent = '📊 Диаграмма';
+                this.textContent = 'рџ“Љ Р”РёР°РіСЂР°РјРјР°';
             }
         });
 
         // ==========================================
-        // 22. ИНТЕРАКТИВНЫЙ ДАШБОРД (переход к месяцу)
+        // 22. РРќРўР•Р РђРљРўРР’РќР«Р™ Р”РђРЁР‘РћР Р” (РїРµСЂРµС…РѕРґ Рє РјРµСЃСЏС†Сѓ)
         // ==========================================
         function scrollToMonth(monthName) {
             if (!monthName) return;
@@ -2960,7 +2960,7 @@
                     row.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     row.classList.add('highlight-row');
                     setTimeout(() => row.classList.remove('highlight-row'), 3000);
-                    showToast(`📅 Переход к месяцу: ${monthName}`, 'success');
+                    showToast(`рџ“… РџРµСЂРµС…РѕРґ Рє РјРµСЃСЏС†Сѓ: ${monthName}`, 'success');
                     break;
                 }
             }
@@ -2991,7 +2991,7 @@
         });
 
         // ==========================================
-        // 23. УПРАВЛЕНИЕ ГОДАМИ
+        // 23. РЈРџР РђР’Р›Р•РќРР• Р“РћР”РђРњР
         // ==========================================
         function initYearSelector() {
             refreshYearSelector();
@@ -3008,7 +3008,7 @@
         }
 
         // ==========================================
-        // 24. СРАВНЕНИЕ ЛЕТ
+        // 24. РЎР РђР’РќР•РќРР• Р›Р•Рў
         // ==========================================
         function updateCompareYears() {
             const select = document.getElementById('compareYearSelect');
@@ -3025,7 +3025,7 @@
                 });
                 availableYears.sort((a,b) => b - a);
             }
-            select.innerHTML = '<option value="">Выберите год</option>';
+            select.innerHTML = '<option value="">Р’С‹Р±РµСЂРёС‚Рµ РіРѕРґ</option>';
             availableYears.forEach(y => {
                 const opt = document.createElement('option');
                 opt.value = y;
@@ -3065,7 +3065,7 @@
         });
 
         // ==========================================
-        // 25. КВАРТАЛЬНАЯ РАЗБИВКА
+        // 25. РљР’РђР РўРђР›Р¬РќРђРЇ Р РђР—Р‘РР’РљРђ
         // ==========================================
         document.querySelectorAll('input[name="quarterMode"]').forEach(radio => {
             radio.addEventListener('change', function() {
@@ -3076,7 +3076,7 @@
         });
 
         // ==========================================
-        // 26. ОБРАБОТЧИКИ ДЛЯ ГРАФИКОВ ЗАРПЛАТЫ
+        // 26. РћР‘Р РђР‘РћРўР§РРљР Р”Р›РЇ Р“Р РђР¤РРљРћР’ Р—РђР РџР›РђРўР«
         // ==========================================
         document.getElementById('salaryChartType').addEventListener('change', function() {
             state.salaryChartType = this.value;
@@ -3106,7 +3106,7 @@
         });
 
         // ==========================================
-        // 27. ИНИЦИАЛИЗАЦИЯ
+        // 27. РРќРР¦РРђР›РР—РђР¦РРЇ
         // ==========================================
         function init() {
             loadSettings();
