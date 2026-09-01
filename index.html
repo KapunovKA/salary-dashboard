@@ -3,92 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Резервная копия данных — Яндекс Диск</title>
+  <meta name="referrer" content="no-referrer">
+  <title>Резервная копия — Яндекс Диск</title>
   <style>
     :root {
-      color-scheme: light;
-      --bg: #f4f7fb;
+      --bg: #f3f6fb;
       --card: #ffffff;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --blue: #2563eb;
-      --blue-hover: #1d4ed8;
-      --green: #15803d;
-      --red: #b91c1c;
-      --amber: #a16207;
-      --border: #dbe3ef;
+      --text: #172033;
+      --muted: #64748b;
+      --border: #d9e2ef;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --secondary: #475569;
+      --success: #166534;
+      --error: #b91c1c;
+      --warning: #92400e;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
+      padding: 24px;
       display: grid;
       place-items: center;
-      padding: 24px;
       font-family: Arial, Helvetica, sans-serif;
-      background: var(--bg);
       color: var(--text);
+      background: var(--bg);
     }
     .card {
-      width: min(720px, 100%);
+      width: min(760px, 100%);
       padding: 28px;
-      background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
-      box-shadow: 0 12px 35px rgba(30, 41, 59, .10);
+      background: var(--card);
+      box-shadow: 0 14px 38px rgba(15, 23, 42, .10);
     }
-    h1 { margin: 0 0 12px; font-size: clamp(24px, 4vw, 34px); }
+    h1 { margin: 0 0 12px; font-size: clamp(25px, 4vw, 34px); }
     p { line-height: 1.55; }
-    .note {
+    .notice {
       margin: 18px 0;
       padding: 14px;
-      border-left: 4px solid var(--blue);
-      background: #eff6ff;
+      border-left: 4px solid var(--primary);
       border-radius: 8px;
+      background: #eff6ff;
     }
-    .controls { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+    .buttons { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0 0; }
     button {
-      cursor: pointer;
       border: 0;
       border-radius: 9px;
       padding: 12px 16px;
+      cursor: pointer;
+      color: #fff;
+      background: var(--primary);
       font-size: 15px;
       font-weight: 700;
-      background: var(--blue);
-      color: #fff;
-      transition: background .15s ease, transform .15s ease, opacity .15s ease;
     }
-    button:hover:not(:disabled) { background: var(--blue-hover); transform: translateY(-1px); }
-    button.secondary { background: #475569; }
+    button:hover:not(:disabled) { background: var(--primary-hover); }
+    button.secondary { background: var(--secondary); }
     button.secondary:hover:not(:disabled) { background: #334155; }
-    button:disabled { cursor: wait; opacity: .65; }
+    button:disabled { opacity: .62; cursor: wait; }
     #status {
-      min-height: 54px;
+      min-height: 58px;
       margin-top: 20px;
-      padding: 13px 14px;
+      padding: 14px;
+      white-space: pre-wrap;
+      line-height: 1.45;
       border: 1px solid var(--border);
       border-radius: 9px;
       background: #f8fafc;
-      line-height: 1.45;
-      white-space: pre-wrap;
     }
-    #status.success { color: var(--green); background: #f0fdf4; border-color: #bbf7d0; }
-    #status.error { color: var(--red); background: #fef2f2; border-color: #fecaca; }
-    #status.warning { color: var(--amber); background: #fffbeb; border-color: #fde68a; }
-    .small { color: var(--muted); font-size: 13px; }
-    code { padding: 2px 5px; background: #eef2f7; border-radius: 4px; }
+    #status.success { color: var(--success); background: #f0fdf4; border-color: #bbf7d0; }
+    #status.error { color: var(--error); background: #fef2f2; border-color: #fecaca; }
+    #status.warning { color: var(--warning); background: #fffbeb; border-color: #fde68a; }
+    .small { margin-top: 18px; color: var(--muted); font-size: 13px; }
+    code { padding: 2px 5px; border-radius: 4px; background: #eef2f7; }
   </style>
 </head>
 <body>
   <main class="card">
     <h1>Резервная копия на Яндекс Диске</h1>
-    <p>Этот пример сохраняет и загружает данные браузера <code>localStorage</code> в JSON-файл на Яндекс Диск.</p>
+    <p>Страница сохраняет данные из <code>localStorage</code> в JSON-файл и загружает их обратно.</p>
 
-    <div class="note">
-      Перед первой операцией нажмите «Указать токен» и вставьте OAuth-токен Яндекс Диска с правом доступа к Диску.
+    <div class="notice">
+      Откройте эту страницу через локальный сервер или обычный HTTPS-хостинг. Не запускайте её двойным щелчком как <code>file:///...</code>.
     </div>
 
-    <div class="controls">
+    <div class="buttons">
       <button type="button" id="tokenBtn" class="secondary">🔑 Указать токен</button>
       <button type="button" id="saveCloudBtn">☁️ Сохранить на Яндекс Диск</button>
       <button type="button" id="loadCloudBtn">☁️ Загрузить с Яндекс Диска</button>
@@ -97,8 +97,8 @@
     <div id="status" role="status">Готово к работе.</div>
 
     <p class="small">
-      Резервная копия: <code>app:/salary_dashboard_backup.json</code>.
-      Для работы с собственной страницей перенесите функции сохранения и загрузки в её JavaScript.
+      Путь резервной копии: <code>app:/salary_dashboard_backup.json</code>.
+      Токен хранится только в localStorage текущего браузера.
     </p>
   </main>
 
@@ -107,16 +107,16 @@
 
     const ПУТЬ_К_РЕЗЕРВНОЙ_КОПИИ = 'app:/salary_dashboard_backup.json';
     const КЛЮЧ_ТОКЕНА = 'yandex_disk_token';
-    const КЛЮЧИ_СИСТЕМЫ = new Set([КЛЮЧ_ТОКЕНА]);
+    const СИСТЕМНЫЕ_КЛЮЧИ = new Set([КЛЮЧ_ТОКЕНА]);
 
     const кнопкаТокена = document.getElementById('tokenBtn');
     const кнопкаСохранения = document.getElementById('saveCloudBtn');
     const кнопкаЗагрузки = document.getElementById('loadCloudBtn');
-    const блокСтатуса = document.getElementById('status');
+    const статус = document.getElementById('status');
 
     function показатьСтатус(текст, тип = 'info') {
-      блокСтатуса.textContent = текст;
-      блокСтатуса.className = тип === 'info' ? '' : тип;
+      статус.textContent = текст;
+      статус.className = тип === 'info' ? '' : тип;
     }
 
     function получитьТокен() {
@@ -134,7 +134,7 @@
     function запроситьТокен() {
       const токен = prompt(
         'Вставьте OAuth-токен Яндекс Диска.\n\n' +
-        'Токен будет сохранён только в localStorage этого браузера.',
+        'Токен будет сохранён только в этом браузере.',
         получитьТокен()
       );
 
@@ -146,7 +146,7 @@
       }
 
       сохранитьТокен(токен);
-      показатьСтатус('Токен сохранён. Теперь можно выполнить загрузку или сохранение.', 'success');
+      показатьСтатус('Токен сохранён. Можно выполнить загрузку или сохранение.', 'success');
       return токен.trim();
     }
 
@@ -154,16 +154,31 @@
       return получитьТокен() || запроситьТокен();
     }
 
+    function установитьЗанятость(занято) {
+      кнопкаТокена.disabled = занято;
+      кнопкаСохранения.disabled = занято;
+      кнопкаЗагрузки.disabled = занято;
+    }
+
+    function проверитьСпособЗапуска() {
+      if (window.location.protocol === 'file:') {
+        throw new Error(
+          'Страница запущена как файл file:///... Браузер может блокировать запросы. ' +
+          'Запустите её через http://localhost:8080 или разместите на HTTPS-хостинге.'
+        );
+      }
+    }
+
     function получитьДанныеДляКопии() {
       const данные = {
-        version: 1,
+        version: 2,
         createdAt: new Date().toISOString(),
         localStorage: {}
       };
 
       for (let i = 0; i < localStorage.length; i += 1) {
         const ключ = localStorage.key(i);
-        if (ключ && !КЛЮЧИ_СИСТЕМЫ.has(ключ)) {
+        if (ключ && !СИСТЕМНЫЕ_КЛЮЧИ.has(ключ)) {
           данные.localStorage[ключ] = localStorage.getItem(ключ);
         }
       }
@@ -177,37 +192,36 @@
       }
 
       if (!данные.localStorage || typeof данные.localStorage !== 'object') {
-        throw new Error('В JSON-файле нет раздела localStorage. Возможно, выбран неверный файл.');
+        throw new Error('В JSON-файле отсутствует раздел localStorage. Выбран неверный файл.');
       }
 
       let количество = 0;
       for (const [ключ, значение] of Object.entries(данные.localStorage)) {
-        if (!КЛЮЧИ_СИСТЕМЫ.has(ключ)) {
+        if (!СИСТЕМНЫЕ_КЛЮЧИ.has(ключ)) {
           localStorage.setItem(ключ, String(значение));
           количество += 1;
         }
       }
-
       return количество;
     }
 
-    async function получитьОписаниеОшибки(ответ) {
+    async function текстОшибкиAPI(ответ) {
       try {
         const данные = await ответ.json();
         return данные.description || данные.message || '';
-      } catch (ошибка) {
+      } catch {
         return '';
       }
     }
 
-    async function проверитьОтветЯндексДиска(ответ, операция) {
+    async function проверитьОтветAPI(ответ, операция) {
       if (ответ.ok) return;
 
-      const описание = await получитьОписаниеОшибки(ответ);
+      const описание = await текстОшибкиAPI(ответ);
 
       if (ответ.status === 401) {
         удалитьТокен();
-        throw new Error('Токен недействителен или истёк. Укажите новый OAuth-токен.');
+        throw new Error('OAuth-токен недействителен или истёк. Укажите новый токен.');
       }
 
       if (ответ.status === 403) {
@@ -215,66 +229,74 @@
       }
 
       if (ответ.status === 404 && операция === 'загрузка') {
-        throw new Error('Файл резервной копии не найден. Сначала сохраните данные на Яндекс Диск.');
+        throw new Error('Резервная копия не найдена. Сначала сохраните данные на Яндекс Диск.');
       }
 
-      throw new Error(описание || `Ошибка Яндекс Диска: HTTP ${ответ.status}.`);
+      throw new Error(описание || `Ошибка API Яндекс Диска: HTTP ${ответ.status}.`);
     }
 
-    function установитьСостояниеКнопок(занято) {
-      кнопкаТокена.disabled = занято;
-      кнопкаСохранения.disabled = занято;
-      кнопкаЗагрузки.disabled = занято;
+    function параметрыВнешнегоЗапроса(метод = 'GET') {
+      return {
+        method: метод,
+        mode: 'cors',
+        credentials: 'omit',
+        referrerPolicy: 'no-referrer',
+        cache: 'no-store'
+      };
     }
 
     async function сохранитьНаЯндексДиск() {
       const токен = получитьИлиЗапроситьТокен();
       if (!токен) return;
 
-      установитьСостояниеКнопок(true);
+      установитьЗанятость(true);
 
       try {
-        показатьСтатус('Шаг 1 из 2: получаю ссылку для загрузки в Яндекс Диск…');
+        проверитьСпособЗапуска();
+        показатьСтатус('Шаг 1 из 2: получаю ссылку для отправки резервной копии…');
 
-        const ответСсылки = await fetch(
-          'https://cloud-api.yandex.net/v1/disk/resources/upload?path=' +
-          encodeURIComponent(ПУТЬ_К_РЕЗЕРВНОЙ_КОПИИ) +
-          '&overwrite=true',
-          {
-            method: 'GET',
-            headers: { Authorization: 'OAuth ' + токен }
-          }
-        );
+        const url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?' +
+          'path=' + encodeURIComponent(ПУТЬ_К_РЕЗЕРВНОЙ_КОПИИ) +
+          '&overwrite=true';
 
-        await проверитьОтветЯндексДиска(ответСсылки, 'сохранение');
+        const ответСсылки = await fetch(url, {
+          method: 'GET',
+          mode: 'cors',
+          credentials: 'omit',
+          referrerPolicy: 'no-referrer',
+          cache: 'no-store',
+          headers: { Authorization: 'OAuth ' + токен }
+        });
+
+        await проверитьОтветAPI(ответСсылки, 'сохранение');
         const информация = await ответСсылки.json();
 
         if (!информация.href) {
-          throw new Error('Яндекс Диск не вернул ссылку для загрузки файла.');
+          throw new Error('API не вернул временную ссылку для загрузки файла.');
         }
 
-        показатьСтатус('Шаг 2 из 2: отправляю резервную копию в облако…');
+        показатьСтатус('Шаг 2 из 2: отправляю JSON-файл в Яндекс Диск…');
 
         const данные = получитьДанныеДляКопии();
-        const ответЗагрузки = await fetch(информация.href, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json; charset=utf-8' },
-          body: JSON.stringify(данные, null, 2)
-        });
+        const настройкиЗапроса = параметрыВнешнегоЗапроса('PUT');
+        настройкиЗапроса.headers = { 'Content-Type': 'application/json; charset=utf-8' };
+        настройкиЗапроса.body = JSON.stringify(данные, null, 2);
+
+        const ответЗагрузки = await fetch(информация.href, настройкиЗапроса);
 
         if (!ответЗагрузки.ok) {
-          throw new Error(`Не удалось сохранить файл: HTTP ${ответЗагрузки.status}.`);
+          throw new Error(`Яндекс Диск не принял файл: HTTP ${ответЗагрузки.status}.`);
         }
 
         показатьСтатус(
-          `✅ Резервная копия сохранена. Сохранено записей: ${Object.keys(данные.localStorage).length}.`,
+          `✅ Резервная копия сохранена. Записей в копии: ${Object.keys(данные.localStorage).length}.`,
           'success'
         );
       } catch (ошибка) {
         console.error('Ошибка сохранения:', ошибка);
-        показатьСтатус('❌ Сохранение не выполнено: ' + ошибка.message, 'error');
+        показатьСтатус('❌ Сохранение не выполнено: ' + (ошибка.message || String(ошибка)), 'error');
       } finally {
-        установитьСостояниеКнопок(false);
+        установитьЗанятость(false);
       }
     }
 
@@ -282,54 +304,59 @@
       const токен = получитьИлиЗапроситьТокен();
       if (!токен) return;
 
-      установитьСостояниеКнопок(true);
+      установитьЗанятость(true);
 
       try {
-        показатьСтатус('Шаг 1 из 3: получаю ссылку на резервную копию…');
+        проверитьСпособЗапуска();
+        показатьСтатус('Шаг 1 из 3: запрашиваю ссылку на резервную копию…');
 
-        const ответСсылки = await fetch(
-          'https://cloud-api.yandex.net/v1/disk/resources/download?path=' +
-          encodeURIComponent(ПУТЬ_К_РЕЗЕРВНОЙ_КОПИИ),
-          {
-            method: 'GET',
-            headers: { Authorization: 'OAuth ' + токен }
-          }
-        );
+        const url = 'https://cloud-api.yandex.net/v1/disk/resources/download?path=' +
+          encodeURIComponent(ПУТЬ_К_РЕЗЕРВНОЙ_КОПИИ);
 
-        await проверитьОтветЯндексДиска(ответСсылки, 'загрузка');
+        const ответСсылки = await fetch(url, {
+          method: 'GET',
+          mode: 'cors',
+          credentials: 'omit',
+          referrerPolicy: 'no-referrer',
+          cache: 'no-store',
+          headers: { Authorization: 'OAuth ' + токен }
+        });
+
+        await проверитьОтветAPI(ответСсылки, 'загрузка');
         const информация = await ответСсылки.json();
 
         if (!информация.href) {
-          throw new Error('Яндекс Диск не вернул ссылку для скачивания файла.');
+          throw new Error('API не вернул временную ссылку для скачивания файла.');
         }
 
-        показатьСтатус('Шаг 2 из 3: скачиваю данные из облака…');
+        показатьСтатус('Шаг 2 из 3: скачиваю JSON-файл из Яндекс Диска…');
 
-        const ответФайла = await fetch(информация.href, { method: 'GET' });
+        const ответФайла = await fetch(информация.href, параметрыВнешнегоЗапроса('GET'));
+
         if (!ответФайла.ok) {
           throw new Error(`Не удалось скачать резервную копию: HTTP ${ответФайла.status}.`);
         }
 
-        показатьСтатус('Шаг 3 из 3: проверяю и применяю данные…');
+        показатьСтатус('Шаг 3 из 3: проверяю и восстанавливаю данные…');
 
         let данные;
         try {
           данные = await ответФайла.json();
-        } catch (ошибкаJSON) {
-          throw new Error('Файл резервной копии не является корректным JSON-файлом.');
+        } catch {
+          throw new Error('Загруженный файл не является корректным JSON-файлом.');
         }
 
         const количество = применитьДанныеИзКопии(данные);
 
         показатьСтатус(
-          `✅ Данные загружены с Яндекс Диска. Восстановлено записей: ${количество}. Обновите страницу, чтобы приложение прочитало новые данные.`,
+          `✅ Данные загружены. Восстановлено записей: ${количество}. Теперь обновите страницу.`,
           'success'
         );
       } catch (ошибка) {
         console.error('Ошибка загрузки:', ошибка);
-        показатьСтатус('❌ Загрузка не выполнена: ' + ошибка.message, 'error');
+        показатьСтатус('❌ Загрузка не выполнена: ' + (ошибка.message || String(ошибка)), 'error');
       } finally {
-        установитьСостояниеКнопок(false);
+        установитьЗанятость(false);
       }
     }
 
