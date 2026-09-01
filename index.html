@@ -2100,10 +2100,20 @@
                     throw new Error(`Ошибка получения URL: ${errorText}`);
                 }
                 const downloadUrlData = await downloadUrlResponse.json();
-                // Добавляем параметр, чтобы избежать кеширования
                 const downloadUrl = downloadUrlData.href + '&_t=' + Date.now();
-                const downloadResponse = await fetch(downloadUrl);
+                // ВАЖНО: передаём токен и при запросе по прямой ссылке
+                const downloadResponse = await fetch(downloadUrl, {
+                    headers: {
+                        'Authorization': `OAuth ${token}`
+                    }
+                });
                 if (!downloadResponse.ok) {
+                    if (downloadResponse.status === 401 || downloadResponse.status === 403) {
+                        showToast('❌ Токен недействителен или истёк. Введите новый.', 'error');
+                        setYandexToken(null);
+                        showTokenModal();
+                        return null;
+                    }
                     throw new Error(`Ошибка скачивания: ${downloadResponse.statusText}`);
                 }
                 const data = await downloadResponse.json();
