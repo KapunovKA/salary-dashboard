@@ -261,6 +261,14 @@
         .widget-item:hover .widget-change .arrow { transform:scale(1.2); }
 
         .right-widget { display:flex; flex-direction:column; align-items:flex-end; gap:8px; flex-shrink:0; margin-left:auto; }
+        .tooltip-container {
+            position:relative;
+            display:inline-block;
+        }
+        /* Скрываем тултип, если рабочий день окончен */
+        .tooltip-container.workday-ended .tooltip-box {
+            display: none;
+        }
         .clock-widget { background:var(--clock-bg); padding:10px 24px; border-radius:60px; color:var(--clock-text); box-shadow:0 6px 14px rgba(20,30,60,0.15); border:1px solid var(--clock-border); transition:all var(--transition); cursor:default; backdrop-filter:blur(2px); white-space:nowrap; }
         .clock-widget:hover { background:var(--clock-hover); border-color:var(--clock-border); box-shadow:0 10px 24px rgba(0,20,60,0.2); transform:scale(1.02); }
         .clock-date { font-size:0.8rem; font-weight:400; letter-spacing:0.5px; color:#b2c6ed; margin-right:10px; }
@@ -288,12 +296,35 @@
         .weather-widget .weather-desc { opacity:0.8; font-size:0.75rem; }
         .weather-widget .weather-error { color:var(--change-negative); font-size:0.75rem; }
 
-        /* ===== Тултипы ===== */
-        .tooltip-container { position:relative; display:inline-block; }
-        .tooltip-box { visibility:hidden; opacity:0; transition:opacity 0.2s ease, transform 0.15s ease; position:absolute; z-index:100; background:var(--tooltip-bg); border-radius:22px; padding:16px 20px 18px; min-width:230px; max-width:320px; box-shadow:var(--modal-shadow); border:1px solid var(--tooltip-border); backdrop-filter:blur(6px); pointer-events:none; transform:translateY(6px); color:var(--text-primary); }
-        .tooltip-container:hover .tooltip-box { visibility:visible; opacity:1; transform:translateY(0px); }
+        /* ===== Тултипы (общие) ===== */
+        .tooltip-box {
+            visibility:hidden;
+            opacity:0;
+            transition:opacity 0.2s ease, transform 0.15s ease;
+            position:absolute;
+            z-index:100;
+            background:var(--tooltip-bg);
+            border-radius:22px;
+            padding:16px 20px 18px;
+            min-width:230px;
+            max-width:320px;
+            box-shadow:var(--modal-shadow);
+            border:1px solid var(--tooltip-border);
+            backdrop-filter:blur(6px);
+            pointer-events:none;
+            transform:translateY(6px);
+            color:var(--text-primary);
+        }
+        .tooltip-container:hover .tooltip-box {
+            visibility:visible;
+            opacity:1;
+            transform:translateY(0px);
+        }
+        /* Для левых виджетов тултип появляется сверху */
         .left-widgets .tooltip-container .tooltip-box { top:130%; left:0; }
+        /* Для правого виджета (часы) тултип появляется снизу, но мы скрываем его через класс, если рабочий день окончен */
         .right-widget .tooltip-container .tooltip-box { top:130%; right:0; left:auto; min-width:230px; }
+        /* Остальные стили тултипа */
         .tooltip-title { font-weight:600; font-size:0.9rem; color:var(--text-primary); border-bottom:1px solid var(--border-color); padding-bottom:6px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; }
         .tooltip-title small { font-weight:400; font-size:0.7rem; color:var(--text-muted); }
         .tooltip-list { list-style:none; display:flex; flex-direction:column; gap:4px; }
@@ -678,7 +709,7 @@
     <div class="widget-row">
         <div class="left-widgets" id="widgetContainer"></div>
         <div class="right-widget">
-            <div class="tooltip-container">
+            <div class="tooltip-container" id="clockTooltipContainer">
                 <div class="clock-widget">
                     <span class="clock-date" id="current-date">—</span>
                     <span class="clock-time" id="current-time">--:--</span>
@@ -1033,7 +1064,7 @@
             compareYears: [],
             authenticated: false,
             inactivityTimeout: null,
-            inactivityDelay: 300000, // автовыход из системы (300000 мс = 5 минут)
+            inactivityDelay: 300000, // автовыход из системы (установлено 5 мин = 300000 мс)
             dashTooltipData: null
         };
 
@@ -1727,7 +1758,7 @@
         }
 
         // ==========================================
-        // 10. ЧАСЫ (с "рабочий день окончен")
+        // 10. ЧАСЫ (с "рабочий день окончен" и управлением классом)
         // ==========================================
         function updateClock() {
             const now = new Date();
@@ -1735,11 +1766,15 @@
                 year: 'numeric' });
             
             const hours = now.getHours();
+            const container = document.getElementById('clockTooltipContainer');
             if (hours >= 18) {
                 document.getElementById('current-time').textContent = '🏁 Рабочий день окончен';
+                container.classList.add('workday-ended');
+                // Скрываем тултип
             } else {
                 document.getElementById('current-time').textContent = now.toLocaleTimeString('ru-RU', { hour: '2-digit',
                     minute: '2-digit' });
+                container.classList.remove('workday-ended');
             }
 
             const endWork = new Date(now);
